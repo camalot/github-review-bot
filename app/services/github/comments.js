@@ -18,7 +18,7 @@ function postComment(number, repo, comment, callback) {
 	 */
 	auth.authenticate();
 	github.issues.createComment({
-		user: config.organization,
+		owner: config.github.organization,
 		repo: repo,
 		number: number,
 		body: comment
