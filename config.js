@@ -1,17 +1,21 @@
 var merge = require('merge');
 var config = merge(require('./app/rules/config'));
 
-config.organization = process.env.GRB_ORGANIZATION;
-config.username = process.env.GRB_USERNAME;
+var config = {};
+
 // include a `.env` file in the root
 // loaded in /bin/www
 // or have them loaded into the environment
 
+// the github organization
+config.organization = process.env.GRB_ORGANIZATION;
 // oAuth client id
 config.authClientID = process.env.GRB_AUTH_CLIENT_ID;
 // oAuth client secret
 config.authClientSecret = process.env.GRB_AUTH_CLIENT_SECRET;
 
+// the username for the bot
+config.username = process.env.GRB_BOT_USERNAME;
 // the github user access token
 config.accessToken = process.env.GRB_ACCESS_TOKEN;
 // the webhook secret used to generate the x-hub sha
@@ -19,21 +23,23 @@ config.webhookSecret = process.env.GRB_WEBHOOK_SECRET;
 
 config.github = {
 	// the github organization
-	organization: process.env.GRB_GH_ORGANIZATION || 'savolabs',
+	organization: process.env.GRB_ORGANIZATION || 'savolabs',
 	// the username for the bot
-	username: process.env.GRB_GH_BOT_USERNAME || 'savo-ci',
+	username: process.env.GRB_BOT_USERNAME || 'savo-ci',
 	// the github user access token
-	token: process.env.GRB_GH_ACCESS_TOKEN,
+	token: process.env.GRB_ACCESS_TOKEN,
 	// the webhook secret used to generate the x-hub sha
-	webhookSecret: process.env.GRB_GH_WEBHOOK_SECRET
+	webhookSecret: process.env.GRB_WEBHOOK_SECRET
 };
+// the base url for the bot
+config.botUrlRoot = process.env.GRB_BOT_URL;
 
 // the label that indicates the PR needs review
-config.labelNeedsReview = 'needs-peer-review';
+config.labelNeedsReview = process.env.GRB_NEEDS_REVIEW_LABEL || 'needs-peer-review';
 // the label that indicates that the PR has been reviewed.
-config.labelPeerReviewed = 'peer-reviewed';
+config.labelPeerReviewed = process.env.GRB_PEER_REVIEWED_LABEL || 'peer-reviewed';
 // the label that indicates that someone wants more work before approving
-config.labelNeedsWork = 'needs-work';
+config.labelNeedsWork = process.env.GRB_NEEDS_WORK_LABEL || 'needs-work';
 // the default number of reviews needed.
 config.reviewsNeeded = 3;
 // should the bot auto-merge the PR once reviewed?
@@ -68,8 +74,6 @@ config.needsWorkRegex = /((?:\s*:-1:(?:\s+|$))|(?:\s*needs work(?:\s+|$))|(?:\s*
 // the events to hook to when attaching the bot to the repository
 config.pullRequestEvents = ['pull_request', 'issue_comment', 'pull_request_review_comment'];
 
-// the base url for the bot
-config.botUrlRoot = process.env.GRB_BOT_URL;
 
 if ( config.botUrlRoot == null ) {
 	throw new Error("Configuration: Missing configuration value for 'botUrlRoot'");
