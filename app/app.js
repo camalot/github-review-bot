@@ -51,7 +51,6 @@ if(config.github.webhookSecret) {
 }
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-console.log("secret: " +config.github.webhookSecret);
 app.use(session({
   secret: config.github.webhookSecret,
   resave: false,
