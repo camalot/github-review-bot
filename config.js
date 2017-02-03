@@ -3,24 +3,9 @@ var merge = require('merge');
 var config = merge(require('./app/rules/config'));
 
 var config = {};
-
 // include a `.env` file in the root
 // loaded in /bin/www
 // or have them loaded into the environment
-
-// the github organization
-config.organization = process.env.GRB_ORGANIZATION;
-// oAuth client id
-config.authClientID = process.env.GRB_AUTH_CLIENT_ID;
-// oAuth client secret
-config.authClientSecret = process.env.GRB_AUTH_CLIENT_SECRET;
-
-// the username for the bot
-config.username = process.env.GRB_BOT_USERNAME;
-// the github user access token
-config.accessToken = process.env.GRB_ACCESS_TOKEN;
-// the webhook secret used to generate the x-hub sha
-config.webhookSecret = process.env.GRB_WEBHOOK_SECRET;
 
 config.github = {
 	// the github organization
@@ -30,7 +15,11 @@ config.github = {
 	// the github user access token
 	token: process.env.GRB_ACCESS_TOKEN,
 	// the webhook secret used to generate the x-hub sha
-	webhookSecret: process.env.GRB_WEBHOOK_SECRET
+	webhookSecret: process.env.GRB_WEBHOOK_SECRET,
+	// oAuth client id
+	authClientID: process.env.GRB_AUTH_CLIENT_ID,
+	// oAuth client secret
+	authClientSecret: process.env.GRB_AUTH_CLIENT_SECRET
 };
 // the base url for the bot
 config.botUrlRoot = process.env.GRB_BOT_URL;
@@ -68,38 +57,50 @@ config.filenameFilter = '';
 config.shameComment = ":bell: Shame! :bell: Shame!\nYou cannot vote to approve your own PR. 'A' for effort though.";
 // regex for "looks good"
 // do not use /g it causes failures on successful matches
+<<<<<<< HEAD
 config.lgtmRegex = /(:\+1:|(?:\blgtm\b|\blooks good(?:\sto me!?)?\b)|:shipit:|👍)/i;
 // regex for "needs work"
 // do not use /g it causes failures on successful matches
+=======
+// config.lgtmRegex = /((?:\s*LGTM(?:\s+|$))|(?:\s*looks good(?:\sto me!?)?(?:\s+|$))|(?:\s*:\+1:(?:\s+|$))|(?:\s*:shipit:(?:\s+|$))|(?:\s*👍(?:\s+|$)))/i;
+config.lgtmRegex = /(:\+1:|(?:\blgtm\b|\blooks good(?:\sto me!?)?\b)|:shipit:|👍)/i;
+// regex for "needs work"
+// do not use /g it causes failures on successful matches
+// config.needsWorkRegex = /((?:\s*:-1:(?:\s+|$))|(?:\s*needs work(?:\s+|$))|(?:\s*👎(?:\s+|$)))/i;
+>>>>>>> develop
 config.needsWorkRegex = /(\bneeds (?:some )?work\b|:-1:|👎)/i;
 // the events to hook to when attaching the bot to the repository
 config.pullRequestEvents = ['pull_request', 'issue_comment', 'pull_request_review_comment', 'pull_request_review'];
 
 
-if ( config.botUrlRoot == null ) {
+if (!config.botUrlRoot) {
 	throw new Error("Configuration: Missing configuration value for 'botUrlRoot'");
 }
 
-if ( config.organization == null ) {
-	throw new Error("Configuration: Missing configuration value for 'organization'");
+if (!config.github.organization) {
+	throw new Error("Configuration: Missing configuration value for 'github.organization'");
 }
 
-if ( config.username == null ) {
-	throw new Error("Configuration: Missing configuration value for 'username'");
+if (!config.github.username) {
+	throw new Error("Configuration: Missing configuration value for 'github.username'");
 }
 
-if ( config.github.token == null ) {
-	throw new Error("Configuration: Missing configuration value for github.token");
+if (!config.github.token) {
+	throw new Error("Configuration: Missing configuration value for 'github.token'");
+}
+
+if (!config.github.webhookSecret) {
+	throw new Error("Configuration: Missing configuration value for 'github.webhookSecret'");
 }
 
 // Setup Instructions Comment
 if (config.instructionsComment === '') {
-    var comment = 'Hi! I\'m your friendly Peer Review Bot. For this Pull Request to be labeled as "peer-reviewed", ' +
-                  'you\'ll need at least {reviewsNeeded} comments containing the magic phrase "LGTM" or ":+1:". ' +
-									'\n\nIf someone replies with "Needs Work" or ":-1:", that same user will need to reply again with indicating ' +
-									'they approve of the changes.';
+	var comment = 'Hi! I\'m your friendly Peer Review Bot. For this Pull Request to be labeled as "peer-reviewed", ' +
+		'you\'ll need at least {reviewsNeeded} comments containing the magic phrase "LGTM" or ":+1:". ' +
+		'\n\nIf someone replies with "Needs Work" or ":-1:", that same user will need to reply again with indicating ' +
+		'they approve of the changes.';
 
-    config.instructionsComment = comment;
+	config.instructionsComment = comment;
 }
 
 

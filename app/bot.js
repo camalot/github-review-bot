@@ -19,7 +19,6 @@ let enforce = (repo, reviewsNeeded) => {
 			reject(err);
 		});
 	});
-
 };
 
 let unenforce = (repo) => {
@@ -299,7 +298,6 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 						});
 					}
 
-
 					// process the reactions on the PR
 					// currently, reactions do not trigger a webhook event
 					// so it does not trigger a processing of the PR
@@ -448,7 +446,6 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 let updateLabels =(prNumber, repo, approved, needsWork, labels) => {
 	return new Promise((resolve, reject) => {
 		let changed = false;
-
 		labels = (!labels || !labels.length) ? [] : labels;
 
 		if ((approved !== true && approved !== false) || !prNumber || (needsWork !== true && needsWork !== false) || !repo) {
@@ -523,7 +520,6 @@ let postInstructionsComment = (prNumber, repo) => {
 				if (comment.indexOf('{reviewsNeeded}')) {
 					comment = comment.replace('{reviewsNeeded}', config.reviewsNeeded);
 				}
-
 				githubApi.comments.postComment(prNumber, repo, comment).then((result) => {
 					resolve(result);
 				}, (err) => {

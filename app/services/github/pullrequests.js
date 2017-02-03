@@ -1,5 +1,4 @@
 'use strict';
-
 const githubApi = require('./github-api');
 const github = githubApi.service;
 const auth = require('./auth');
@@ -188,6 +187,37 @@ let getAllReviews = (repo, number) => {
 				}
 			});
 		})
+	});
+};
+
+let _knownReviews = [];
+let _getReviews = ( err, res, callback) => {
+		if(err){
+			return false;
+		}
+		_knownReviews = _knownReviews.concat(res);
+		if(github.hasNextPage(res)) {
+			github.getNextPage(res, (err,res) => { _getReviews(err,res,callback) });
+		} else {
+			if(callback) {
+				callback(err, _knownReviews);
+			}
+		}
+};
+
+let getAllReviews = (repo, number, callback) => {
+	_knownReviews = [];
+	auth.authenticate();
+	github.pullRequests.getReviews({
+		owner: config.github.organization,
+		repo: repo,
+		number: number,
+		per_page: 100
+	}, (err,res) => {
+		if(err){
+			console.error(err);
+		}
+		_getReviews(err, res, callback);
 	});
 };
 

@@ -9,14 +9,14 @@ const Promise = require('promise');
 	 * Private: Authenticate next request
 	 */
 	function authenticate() {
-		if (!config.accessToken) {
+		if (!config.github.token) {
 			throw Error('Fatal: No access token configured!');
 		}
 
 		github.authenticate({
 			type: "basic",
-	    username: config.username,
-	    password: config.accessToken
+	    username: config.github.username,
+	    password: config.github.token
 			// type: 'oauth',
 			// token: config.oauth2token
 		});
