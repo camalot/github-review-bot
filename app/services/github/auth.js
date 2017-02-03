@@ -1,7 +1,9 @@
-var githubApi = require('./github-api'),
-	github = githubApi.service,
-	debug = require('debug')('reviewbot:bot'),
-	config = require('../../../config');
+'use strict';
+const githubApi = require('./github-api');
+const github = githubApi.service;
+const debug = require('debug')('reviewbot:bot');
+const config = require('../../../config');
+const Promise = require('promise');
 
 	/**
 	 * Private: Authenticate next request
@@ -20,28 +22,30 @@ var githubApi = require('./github-api'),
 		});
 	}
 
-	function isUserInOrganization(user, callback) {
-		authenticate();
-		console.log("membership for " + user.username + " in " + config.organization);
-		github.orgs.getOrganizationMembership({
-			org: config.organization,
-			user: user.username
-		}, function(err, result) {
-			if(err){
-				callback(false);
-			} else {
-				callback(true);
-			}
+	let isUserInOrganization = (user) => {
+		return new Promise(function(resolve, reject) {
+			authenticate();
+			github.orgs.getOrgMembership({
+				org: config.organization,
+				username: user.username
+			}, function(err, result) {
+				if(err){
+					resolve(false);
+				} else {
+					resolve(true);
+				}
+			});
 		});
 	}
 
-	function isXHubValid(req, callback) {
-		if(!req.isXHub || config.webhookSecret == '' || config.webhookSecret == null) {
-			callback(true);
-			return;
-		}
-		console.log("xhub validated: " + req.isXHubValid());
-		callback(req.isXHubValid());
+	let isXHubValid = (req) => {
+		return new Promise(function(resolve, reject) {
+			if(!req.isXHub || config.webhookSecret == '' || config.webhookSecret == null) {
+				resolve(true);
+			}
+			console.log("xhub validated: " + req.isXHubValid());
+			resolve(req.isXHubValid());
+		});
 	}
 
 	module.exports = {

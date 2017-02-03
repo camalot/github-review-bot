@@ -1,6 +1,7 @@
-var GitHubApi = require('github'),
-	debug = require('debug')('reviewbot:githubapi'),
-	config = require('../../../config');
+'use strict';
+const GitHubApi = require('github');
+const debug = require('debug')('reviewbot:githubapi');
+const config = require('../../../config');
 
 var github = new GitHubApi({
   debug: false,
@@ -10,7 +11,7 @@ var github = new GitHubApi({
   timeout: 8000,
 	version: '3.0.0',
 	headers: {
-		"Accept": "application/vnd.github.squirrel-girl-preview; */*"
+		"Accept": "application/vnd.github.black-cat-preview+json; application/vnd.github.squirrel-girl-preview; */*"
 	}
 });
 
