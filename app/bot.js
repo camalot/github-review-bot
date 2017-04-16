@@ -91,7 +91,7 @@ let checkForFiles = (prNumber, repo) => {
 					match = (item.filename.indexOf(filter) > -1) ? true : match
 					nextFilter();
 				}, (err) => { // done
-					if(err) {
+					if (err) {
 						console.error(err);
 						debug('checkForFiles: error while trying fetch files: ', err);
 						return reject(err);
@@ -99,7 +99,7 @@ let checkForFiles = (prNumber, repo) => {
 					next(null, match);
 				});
 			}, (err, results) => { // done
-				if(err) {
+				if (err) {
 					console.error(err);
 					debug('checkForFiles: error while trying fetch files: ', err);
 					return reject(err);
@@ -157,19 +157,20 @@ let checkForLabel = (prNumber, repo, pr, action) => {
 					console.log("action: " + action);
 					console.log("label: " + labels[i].name);
 					outLabels.push(labels[i]);
-
-					return resolve({
-						labelData: {
-							labeledNeedsReview: labeledNeedsReview,
-							labeledReviewed: labeledReviewed,
-							labeledExclude: labeledExclude,
-							labeledNeedsWork: labeledNeedsWork,
-							labels: outLabels
-						},
-						pr: pr,
-						action: action
-					});
 				}
+
+				return resolve({
+					labelData: {
+						labeledNeedsReview: labeledNeedsReview,
+						labeledReviewed: labeledReviewed,
+						labeledExclude: labeledExclude,
+						labeledNeedsWork: labeledNeedsWork,
+						labels: outLabels
+					},
+					pr: pr,
+					action: action
+				});
+
 			} catch (e) {
 				return reject(e);
 			}
@@ -187,7 +188,7 @@ let _checkForInstructionsComment = (prNumber, repo) => {
 				let matched = comment.body.slice(1, 30).trim() === config.instructionsComment.slice(1, 30).trim();
 				next(null, matched);
 			}, (err, filtered) => { // done
-				if(err) {
+				if (err) {
 					return reject(err);
 				}
 				resolve(filtered.length > 0);
@@ -236,7 +237,7 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 				let needsShame = false;
 				async.each(comments, (comment, next) => {
 					let who = comment.user.login;
-					if(comment.body) {
+					if (comment.body) {
 						let rbody = comment.body.trim();
 						// skip all from bot
 						if (who.trim() === config.username.trim()) {
@@ -293,7 +294,7 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 						next();
 					}
 				}, (err) => { //done
-					if(err) {
+					if (err) {
 						return reject(err);
 					}
 
