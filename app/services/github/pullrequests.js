@@ -56,7 +56,6 @@ let getAll = (repo, callback) => {
 				debug('getPullRequests: Error while fetching PRs: ', err);
 				return reject(err);
 			}
-
 			if (!result || !result.length || result.length < 1) {
 				reject('getPullRequests: No open PRs found');
 				debug('getPullRequests: No open PRs found');

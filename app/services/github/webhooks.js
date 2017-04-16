@@ -48,7 +48,7 @@ let getAll = (repo) => {
 			});
 		});
 	});
-};
+}
 
 let filterBotHooks = (repoName, hooks) => {
 	return new Promise(function(resolve, reject) {
@@ -113,7 +113,7 @@ let deleteWebHook = (repo, id) => {
 			repo: repo,
 			id: id
 		}, (err, reply) => {
-			if (err) {
+			if(err) {
 				return reject(err);
 			}
 			resolve(reply);
@@ -129,7 +129,7 @@ let getWebHookId = (repo, action) => {
 			owner: config.organization,
 			repo: repo
 		}, (err, hooks) => {
-			if (err) {
+			if(err) {
 				// we just return nothing
 				return resolve(null);
 			}
@@ -139,7 +139,7 @@ let getWebHookId = (repo, action) => {
 				}
 				next();
 			}, (err) => { // done
-				if (err) {
+				if(err) {
 					return resolve(null);
 				}
 				resolve(result);
@@ -161,7 +161,7 @@ let createStatus = (repo, status, sha, description, callback) => {
 			/*,
 					target_url: config.botUrlRoot + "/pr-status/" + repo + "/" + pr.id*/
 		}, (err, reply) => {
-			if (err) {
+			if(err) {
 				reject(err);
 			} else {
 				resolve(reply);

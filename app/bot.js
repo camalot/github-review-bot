@@ -76,7 +76,6 @@ let _setStatus = (repo, pr, state, remaining) => {
  * @param {int} prNumber - Number of PR
  * @param {string} repo - The repository name
  */
-
 let checkForFiles = (prNumber, repo) => {
 	return new Promise((resolve, reject) => {
 		let filenameFilter = (config.filenameFilter) ? JSON.parse(config.filenameFilter) : [];
@@ -92,7 +91,7 @@ let checkForFiles = (prNumber, repo) => {
 					match = (item.filename.indexOf(filter) > -1) ? true : match
 					nextFilter();
 				}, (err) => { // done
-					if (err) {
+					if(err) {
 						console.error(err);
 						debug('checkForFiles: error while trying fetch files: ', err);
 						return reject(err);
@@ -100,7 +99,7 @@ let checkForFiles = (prNumber, repo) => {
 					next(null, match);
 				});
 			}, (err, results) => { // done
-				if (err) {
+				if(err) {
 					console.error(err);
 					debug('checkForFiles: error while trying fetch files: ', err);
 					return reject(err);
@@ -150,7 +149,6 @@ let checkForLabel = (prNumber, repo, pr, action) => {
 						outLabels.push(labels[i]);
 					}
 				}
-
 				// we need to remove the peer-reviewed label because there was a new push
 				if (action === 'synchronize' && labels[i].name === config.labelPeerReviewed) {
 					console.log("new push. needs review again.");
@@ -173,7 +171,7 @@ let checkForLabel = (prNumber, repo, pr, action) => {
 					});
 				}
 			} catch (e) {
-				reject(e);
+				return reject(e);
 			}
 		}, (err) => {
 			debug('bot.checkForLabel: Error while fetching labels for single PR: ', err);
@@ -189,7 +187,7 @@ let _checkForInstructionsComment = (prNumber, repo) => {
 				let matched = comment.body.slice(1, 30).trim() === config.instructionsComment.slice(1, 30).trim();
 				next(null, matched);
 			}, (err, filtered) => { // done
-				if (err) {
+				if(err) {
 					return reject(err);
 				}
 				resolve(filtered.length > 0);
@@ -214,9 +212,7 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 			debug('checkForApprovalComments: insufficient parameters');
 			return reject('checkForApprovalComments: insufficient parameters');
 		}
-
 		let createdBy = pr.user.login;
-
 		// we get the commits for the PR, so we can get the date of the most recent commit.
 		// any votes before this date, will be ignored.
 		githubApi.pullrequests.getMostRecentCommit(repo, prNumber).then((lastCommit) => {
@@ -240,7 +236,7 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 				let needsShame = false;
 				async.each(comments, (comment, next) => {
 					let who = comment.user.login;
-					if (comment.body) {
+					if(comment.body) {
 						let rbody = comment.body.trim();
 						// skip all from bot
 						if (who.trim() === config.username.trim()) {
@@ -297,7 +293,7 @@ let checkForApprovalComments = (prNumber, repo, pr) => {
 						next();
 					}
 				}, (err) => { //done
-					if (err) {
+					if(err) {
 						return reject(err);
 					}
 
@@ -534,7 +530,6 @@ let postInstructionsComment = (prNumber, repo) => {
 				if (comment.indexOf('{reviewsNeeded}')) {
 					comment = comment.replace('{reviewsNeeded}', config.reviewsNeeded);
 				}
-
 				githubApi.comments.postComment(prNumber, repo, comment).then((result) => {
 					resolve(result);
 				}, (err) => {
