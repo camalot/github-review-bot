@@ -25,21 +25,27 @@ node ("docker") {
 	])
 	withCredentials([[$class: 'StringBinding', credentialsId: "f98b8136-b4bf-4c0e-aa0f-92bdfbc0bf35",
 																 variable: 'VAULT_AUTH_TOKEN']]) {
-		sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_URL | jq '.data'"
+		env.GRB_BOT_URL = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_URL | jq '.data | to_entries[] | .value'"
+		env.GRB_WEBHOOK_SECRET = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_WEBHOOK_SECRET | jq '.data | to_entries[] | .value'"
+		env.GRB_AUTH_CLIENT_SECRET = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_AUTH_CLIENT_SECRET | jq '.data | to_entries[] | .value'"
+		env.GRB_ACCESS_TOKEN = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_ACCESS_TOKEN | jq '.data | to_entries[] | .value'"
+		env.GRB_ORGANIZATION = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_ORGANIZATION | jq '.data | to_entries[] | .value'"
+		env.GRB_AUTH_CLIENT_ID = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_AUTH_CLIENT_ID | jq '.data | to_entries[] | .value'"
+		env.GRB_BOT_USERNAME = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_USERNAME | jq '.data | to_entries[] | .value'"
 	}
-	def secrets = [
-		[$class: 'VaultSecret', path: 'secret', secretValues: [
-			[$class: 'VaultSecretValue', envVar: 'GRB_WEBHOOK_SECRET', vaultKey: 'GRB_WEBHOOK_SECRET'],
-			[$class: 'VaultSecretValue', envVar: 'GRB_AUTH_CLIENT_SECRET', vaultKey: 'GRB_AUTH_CLIENT_SECRET'],
-			[$class: 'VaultSecretValue', envVar: 'GRB_ACCESS_TOKEN', vaultKey: 'GRB_ACCESS_TOKEN'],
-			[$class: 'VaultSecretValue', envVar: 'GRB_ORGANIZATION', vaultKey: 'GRB_ORGANIZATION'],
-			[$class: 'VaultSecretValue', envVar: 'GRB_BOT_URL', vaultKey: 'GRB_BOT_URL'],
-			[$class: 'VaultSecretValue', envVar: 'GRB_AUTH_CLIENT_ID', vaultKey: 'GRB_AUTH_CLIENT_ID'],
-			[$class: 'VaultSecretValue', envVar: 'GRB_BOT_USERNAME', vaultKey: 'GRB_BOT_USERNAME']
-		]]
-	]
-	echo "URL: ${env.VAULT_SERVER}"
-	def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
+	// def secrets = [
+	// 	[$class: 'VaultSecret', path: 'secret', secretValues: [
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_WEBHOOK_SECRET', vaultKey: 'GRB_WEBHOOK_SECRET'],
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_AUTH_CLIENT_SECRET', vaultKey: 'GRB_AUTH_CLIENT_SECRET'],
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_ACCESS_TOKEN', vaultKey: 'GRB_ACCESS_TOKEN'],
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_ORGANIZATION', vaultKey: 'GRB_ORGANIZATION'],
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_BOT_URL', vaultKey: 'GRB_BOT_URL'],
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_AUTH_CLIENT_ID', vaultKey: 'GRB_AUTH_CLIENT_ID'],
+	// 		[$class: 'VaultSecretValue', envVar: 'GRB_BOT_USERNAME', vaultKey: 'GRB_BOT_USERNAME']
+	// 	]]
+	// ]
+	// echo "URL: ${env.VAULT_SERVER}"
+	// def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
 
 	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
 	env.PROJECT_MINOR_VERSION = MINOR_VERSION
@@ -51,7 +57,7 @@ node ("docker") {
 	def errorMessage = null
 	wrap([$class: 'TimestamperBuildWrapper']) {
 		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-			wrap([$class: 'VaultBuildWrapper', configuration: configuration, vaultSecrets: secrets]) {
+			// wrap([$class: 'VaultBuildWrapper', configuration: configuration, vaultSecrets: secrets]) {
 				Notify.slack(this, "STARTED", null, slack_notify_channel)
 				try {
 						stage ("install" ) {
@@ -84,7 +90,7 @@ node ("docker") {
 				finally {
 					Pipeline.finish(this, currentBuild.result, errorMessage)
 				}
-			}
+			// }
 		}
 	}
 }
