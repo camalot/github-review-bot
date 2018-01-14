@@ -23,7 +23,7 @@ node ("docker") {
 			pollSCM('H/30 * * * *')
 		]),
 	])
-	withCredentials([[$class: 'StringBinding', credentialsId: "f98b8136-b4bf-4c0e-aa0f-92bdfbc0bf35,
+	withCredentials([[$class: 'StringBinding', credentialsId: "f98b8136-b4bf-4c0e-aa0f-92bdfbc0bf35",
 																 variable: 'VAULT_AUTH_TOKEN']]) {
 		sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_URL | jq '.data'"
 	}
