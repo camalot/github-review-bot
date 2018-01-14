@@ -70,9 +70,6 @@ node ("docker") {
 								env.GRB_BOT_USERNAME = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_USERNAME")
 								env.GRB_BOT_URL = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_URL")
 
-								echo env.GRB_BOT_URL
-
-
 								Branch.checkout(this, env.CI_PROJECT_NAME)
 								Pipeline.install(this)
 						}
