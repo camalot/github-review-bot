@@ -25,7 +25,7 @@ node ("docker") {
 	])
 
 	def secrets = [
-		[$class: 'VaultSecret', path: 'secret/', secretValues: [
+		[$class: 'VaultSecret', path: '/v1/secret/', secretValues: [
 			[$class: 'VaultSecretValue', envVar: 'GRB_WEBHOOK_SECRET', vaultKey: 'GRB_WEBHOOK_SECRET'],
 			[$class: 'VaultSecretValue', envVar: 'GRB_AUTH_CLIENT_SECRET', vaultKey: 'GRB_AUTH_CLIENT_SECRET'],
 			[$class: 'VaultSecretValue', envVar: 'GRB_ACCESS_TOKEN', vaultKey: 'GRB_ACCESS_TOKEN'],
@@ -35,7 +35,7 @@ node ("docker") {
 			[$class: 'VaultSecretValue', envVar: 'GRB_BOT_USERNAME', vaultKey: 'GRB_BOT_USERNAME']
 		]]
 	]
-
+	echo "URL: ${env.VAULT_SERVER}"
 	def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
 
 	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
