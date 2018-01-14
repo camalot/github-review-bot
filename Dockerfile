@@ -38,7 +38,7 @@ RUN \
 USER ${VUSER}
 
 RUN \
-	npm run test && \
+	# npm run test && \
 	npm version "${BUILD_VERSION}" --git-tag-version && \
 	npm install --production;
 
