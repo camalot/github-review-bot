@@ -1,30 +1,31 @@
+'use strict';
 
-var express = require('express');
-var passport = require('passport');
-var Strategy = require('passport-github').Strategy;
+const express = require('express');
+const passport = require('passport');
+const Strategy = require('passport-github').Strategy;
 
-var path = require('path');
+const path = require('path');
 
-var logger = require('morgan'),
-		xhub = require('express-x-hub'),
-    bodyParser = require('body-parser'),
-    config = require('../config'),
-    routes = require('./routes/index'),
-		pullrequest = require('./routes/pullrequest'),
-		repository = require('./routes/repository'),
-		comment = require('./routes/comment'),
-    repos = require('./routes/repos'),
-    audit = require('./routes/audit'),
-    login = require('./routes/login'),
-		managed = require('./routes/managed'),
-		nonmanaged = require('./routes/nonmanaged'),
-    session = require('express-session'),
-    app = express();
+const logger = require('morgan');
+const xhub = require('express-x-hub');
+const bodyParser = require('body-parser');
+const config = require('../config');
+const routes = require('./routes/index');
+const pullrequest = require('./routes/pullrequest');
+const repository = require('./routes/repository');
+const comment = require('./routes/comment');
+const repos = require('./routes/repos');
+const audit = require('./routes/audit');
+const login = require('./routes/login');
+const managed = require('./routes/managed');
+const nonmanaged = require('./routes/nonmanaged');
+const session = require('express-session');
+const app = express();
 
-if(config.authClientID && config.authClientSecret) {
+if(config.github.authClientID && config.github.authClientSecret) {
   passport.use(new Strategy({
-    clientID: config.authClientID,
-    clientSecret: config.authClientSecret,
+    clientID: config.github.authClientID,
+    clientSecret: config.github.authClientSecret,
     callbackURL: config.botUrlRoot + "/login/auth/return"
   }, function (accessToken, refreshToken, profile, callback) {
     callback(null,profile);
@@ -46,17 +47,17 @@ app.use(logger('dev'));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/assets/material-design-lite', express.static('node_modules/material-design-lite'));
 
-if(config.webhookSecret) {
-	app.use(xhub({ algorithm: 'sha1', secret: config.webhookSecret}));
+if(config.github.webhookSecret) {
+	app.use(xhub({ algorithm: 'sha1', secret: config.github.webhookSecret}));
 }
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(session({
-  secret: config.webhookSecret,
+  secret: config.github.webhookSecret,
   resave: false,
   saveUninitialized: true,
 }));
-if(config.authClientID && config.authClientSecret) {
+if(config.github.authClientID && config.github.authClientSecret) {
   app.use(passport.initialize());
   app.use(passport.session());
 }
@@ -69,7 +70,7 @@ app.use('/nonmanaged', nonmanaged);
 app.use('/repos', repos);
 app.use('/audit', audit);
 
-if(config.authClientID && config.authClientSecret) {
+if(config.github.authClientID && config.github.authClientSecret) {
   app.use('/login', login);
 }
 
