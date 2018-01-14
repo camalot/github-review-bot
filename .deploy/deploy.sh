@@ -31,6 +31,7 @@ FORCE_DEPLOY=${opt_force:-0};
 TAG_VERSION="${opt_version:-"${CI_BUILD_VERSION:-"latest"}"}";
 INSTANCE_NAME="${opt_name:-"${CI_PROJECT_NAME}"}";
 DOCKER_IMAGE="camalot/${INSTANCE_NAME}:${TAG_VERSION}";
+PORT_MAP="32987:3000";
 
 [[ -z "${INSTANCE_NAME// }" ]] && __error "Environment Variable 'CI_PROJECT_NAME' was not defined";
 [[ -z "${DOCKER_REGISTRY// }" ]] && __error "Environment Variable 'DOCKER_REGISTRY' was not defined";
@@ -63,7 +64,7 @@ docker run -d \
 	--user 0 \
 	--restart unless-stopped \
 	--name "${INSTANCE_NAME}" \
-	-P \
+	-p "${PORT_MAP}" \
 	-e PUID=1000 -e PGID=1000 \
 	-e TZ=America_Chicago \
 	-e GRB_AUTH_CLIENT_ID="${GRB_AUTH_CLIENT_ID}" \
