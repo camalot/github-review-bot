@@ -25,7 +25,7 @@ node ("docker") {
 	])
 
 	def secrets = [
-		[$class: 'VaultSecret', path: 'secret', secretValues: [
+		[$class: 'VaultSecret', path: 'secret/', secretValues: [
 			[$class: 'VaultSecretValue', envVar: 'GRB_WEBHOOK_SECRET', vaultKey: 'GRB_WEBHOOK_SECRET'],
 			[$class: 'VaultSecretValue', envVar: 'GRB_AUTH_CLIENT_SECRET', vaultKey: 'GRB_AUTH_CLIENT_SECRET'],
 			[$class: 'VaultSecretValue', envVar: 'GRB_ACCESS_TOKEN', vaultKey: 'GRB_ACCESS_TOKEN'],
