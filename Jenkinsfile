@@ -47,12 +47,12 @@ node ("docker") {
 	// echo "URL: ${env.VAULT_SERVER}"
 	// def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
 
-	env.GRB_WEBHOOK_SECRET = Vault.getSecret("secret/", "GRB_WEBHOOK_SECRET")
-	env.GRB_AUTH_CLIENT_SECRET = Vault.getSecret("secret/", "GRB_AUTH_CLIENT_SECRET")
-	env.GRB_ACCESS_TOKEN = Vault.getSecret("secret/", "GRB_ACCESS_TOKEN")
-	env.GRB_ORGANIZATION = Vault.getSecret("secret/", "GRB_ORGANIZATION")
-	env.GRB_AUTH_CLIENT_ID = Vault.getSecret("secret/", "GRB_AUTH_CLIENT_ID")
-	env.GRB_BOT_USERNAME = Vault.getSecret("secret/", "GRB_BOT_USERNAME")
+	env.GRB_WEBHOOK_SECRET = Vault.getSecret(this, "secret/", "GRB_WEBHOOK_SECRET")
+	env.GRB_AUTH_CLIENT_SECRET = Vault.getSecret(this, "secret/", "GRB_AUTH_CLIENT_SECRET")
+	env.GRB_ACCESS_TOKEN = Vault.getSecret(this, "secret/", "GRB_ACCESS_TOKEN")
+	env.GRB_ORGANIZATION = Vault.getSecret(this, "secret/", "GRB_ORGANIZATION")
+	env.GRB_AUTH_CLIENT_ID = Vault.getSecret(this, "secret/", "GRB_AUTH_CLIENT_ID")
+	env.GRB_BOT_USERNAME = Vault.getSecret(this, "secret/", "GRB_BOT_USERNAME")
 
 	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
 	env.PROJECT_MINOR_VERSION = MINOR_VERSION
