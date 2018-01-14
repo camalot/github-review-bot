@@ -23,16 +23,16 @@ node ("docker") {
 			pollSCM('H/30 * * * *')
 		]),
 	])
-	withCredentials([[$class: 'StringBinding', credentialsId: "f98b8136-b4bf-4c0e-aa0f-92bdfbc0bf35",
-																 variable: 'VAULT_AUTH_TOKEN']]) {
-		env.GRB_BOT_URL = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_URL | jq '.data | to_entries[] | .value'"
-		env.GRB_WEBHOOK_SECRET = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_WEBHOOK_SECRET | jq '.data | to_entries[] | .value'"
-		env.GRB_AUTH_CLIENT_SECRET = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_AUTH_CLIENT_SECRET | jq '.data | to_entries[] | .value'"
-		env.GRB_ACCESS_TOKEN = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_ACCESS_TOKEN | jq '.data | to_entries[] | .value'"
-		env.GRB_ORGANIZATION = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_ORGANIZATION | jq '.data | to_entries[] | .value'"
-		env.GRB_AUTH_CLIENT_ID = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_AUTH_CLIENT_ID | jq '.data | to_entries[] | .value'"
-		env.GRB_BOT_USERNAME = sh script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_USERNAME | jq '.data | to_entries[] | .value'"
-	}
+	// withCredentials([[$class: 'StringBinding', credentialsId: "f98b8136-b4bf-4c0e-aa0f-92bdfbc0bf35",
+	// 															 variable: 'VAULT_AUTH_TOKEN']]) {
+	// 	env.GRB_BOT_URL = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_URL | jq '.data | to_entries[] | .value'")
+	// 	env.GRB_WEBHOOK_SECRET = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_WEBHOOK_SECRET | jq '.data | to_entries[] | .value'")
+	// 	env.GRB_AUTH_CLIENT_SECRET = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_AUTH_CLIENT_SECRET | jq '.data | to_entries[] | .value'")
+	// 	env.GRB_ACCESS_TOKEN = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_ACCESS_TOKEN | jq '.data | to_entries[] | .value'")
+	// 	env.GRB_ORGANIZATION = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_ORGANIZATION | jq '.data | to_entries[] | .value'")
+	// 	env.GRB_AUTH_CLIENT_ID = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_AUTH_CLIENT_ID | jq '.data | to_entries[] | .value'")
+	// 	env.GRB_BOT_USERNAME = sh (returnStdout: true, script: "curl --insecure -sL -H \"X-Vault-Token: ${env.VAULT_AUTH_TOKEN}\" -X GET ${env.VAULT_SERVER}/v1/secret/GRB_BOT_USERNAME | jq '.data | to_entries[] | .value'")
+	// }
 	// def secrets = [
 	// 	[$class: 'VaultSecret', path: 'secret', secretValues: [
 	// 		[$class: 'VaultSecretValue', envVar: 'GRB_WEBHOOK_SECRET', vaultKey: 'GRB_WEBHOOK_SECRET'],
@@ -46,6 +46,13 @@ node ("docker") {
 	// ]
 	// echo "URL: ${env.VAULT_SERVER}"
 	// def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
+
+	env.GRB_WEBHOOK_SECRET = Vault.getSecret("secret/", "GRB_WEBHOOK_SECRET")
+	env.GRB_AUTH_CLIENT_SECRET = Vault.getSecret("secret/", "GRB_AUTH_CLIENT_SECRET")
+	env.GRB_ACCESS_TOKEN = Vault.getSecret("secret/", "GRB_ACCESS_TOKEN")
+	env.GRB_ORGANIZATION = Vault.getSecret("secret/", "GRB_ORGANIZATION")
+	env.GRB_AUTH_CLIENT_ID = Vault.getSecret("secret/", "GRB_AUTH_CLIENT_ID")
+	env.GRB_BOT_USERNAME = Vault.getSecret("secret/", "GRB_BOT_USERNAME")
 
 	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
 	env.PROJECT_MINOR_VERSION = MINOR_VERSION
