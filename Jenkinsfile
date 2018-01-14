@@ -36,6 +36,8 @@ node ("docker") {
 		]]
 	]
 
+	def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
+
 	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
 	env.PROJECT_MINOR_VERSION = MINOR_VERSION
 
@@ -46,7 +48,7 @@ node ("docker") {
 	def errorMessage = null
 	wrap([$class: 'TimestamperBuildWrapper']) {
 		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-			wrap([$class: 'VaultBuildWrapper', vaultSecrets: secrets]) {
+			wrap([$class: 'VaultBuildWrapper', configuration: configuration, vaultSecrets: secrets]) {
 				Notify.slack(this, "STARTED", null, slack_notify_channel)
 				try {
 						stage ("install" ) {
