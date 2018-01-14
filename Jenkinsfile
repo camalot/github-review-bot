@@ -47,13 +47,6 @@ node ("docker") {
 	// echo "URL: ${env.VAULT_SERVER}"
 	// def configuration = [$class: 'VaultConfiguration', vaultUrl: env.VAULT_SERVER, vaultCredentialId: env.CI_VAULT_CREDENTIAL_ID]
 
-	env.GRB_WEBHOOK_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret/", "GRB_WEBHOOK_SECRET")
-	env.GRB_AUTH_CLIENT_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret/", "GRB_AUTH_CLIENT_SECRET")
-	env.GRB_ACCESS_TOKEN = com.bit13.jenkins.Vault.getSecret(this, "secret/", "GRB_ACCESS_TOKEN")
-	env.GRB_ORGANIZATION = com.bit13.jenkins.Vault.getSecret(this, "secret/", "GRB_ORGANIZATION")
-	env.GRB_AUTH_CLIENT_ID = com.bit13.jenkins.Vault.getSecret(this, "secret/", "GRB_AUTH_CLIENT_ID")
-	env.GRB_BOT_USERNAME = com.bit13.jenkins.Vault.getSecret(this, "secret/", "GRB_BOT_USERNAME")
-
 	env.PROJECT_MAJOR_VERSION = MAJOR_VERSION
 	env.PROJECT_MINOR_VERSION = MINOR_VERSION
 
@@ -69,7 +62,18 @@ node ("docker") {
 				try {
 						stage ("install" ) {
 								deleteDir()
-								Branch.checkout_vsts(this, teamName, env.CI_PROJECT_NAME)
+								env.GRB_WEBHOOK_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_WEBHOOK_SECRET")
+								env.GRB_AUTH_CLIENT_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_SECRET")
+								env.GRB_ACCESS_TOKEN = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ACCESS_TOKEN")
+								env.GRB_ORGANIZATION = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ORGANIZATION")
+								env.GRB_AUTH_CLIENT_ID = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_ID")
+								env.GRB_BOT_USERNAME = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_USERNAME")
+								env.GRB_BOT_URL = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_URL")
+
+								echo env.GRB_BOT_URL
+
+
+								Branch.checkout(this, env.CI_PROJECT_NAME)
 								Pipeline.install(this)
 						}
 						stage ("build") {
