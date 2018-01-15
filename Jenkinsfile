@@ -34,46 +34,46 @@ node ("docker") {
 	def errorMessage = null
 	wrap([$class: 'TimestamperBuildWrapper']) {
 		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
-				Notify.slack(this, "STARTED", null, slack_notify_channel)
-				try {
-						stage ("install" ) {
-								deleteDir()
-								env.GRB_WEBHOOK_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_WEBHOOK_SECRET")
-								env.GRB_AUTH_CLIENT_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_SECRET")
-								env.GRB_ACCESS_TOKEN = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ACCESS_TOKEN")
-								env.GRB_ORGANIZATION = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ORGANIZATION")
-								env.GRB_AUTH_CLIENT_ID = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_ID")
-								env.GRB_BOT_USERNAME = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_USERNAME")
-								env.GRB_BOT_URL = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_URL")
+			Notify.slack(this, "STARTED", null, slack_notify_channel)
+			try {
+					stage ("install" ) {
+						deleteDir()
+						env.GRB_WEBHOOK_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_WEBHOOK_SECRET")
+						env.GRB_AUTH_CLIENT_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_SECRET")
+						env.GRB_ACCESS_TOKEN = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ACCESS_TOKEN")
+						env.GRB_ORGANIZATION = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ORGANIZATION")
+						env.GRB_AUTH_CLIENT_ID = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_ID")
+						env.GRB_BOT_USERNAME = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_USERNAME")
+						env.GRB_BOT_URL = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_URL")
 
-								Branch.checkout(this, env.CI_PROJECT_NAME)
-								Pipeline.install(this)
+						Branch.checkout(this, env.CI_PROJECT_NAME)
+						Pipeline.install(this)
+					}
+					stage ("build") {
+						sh script: "${WORKSPACE}/.deploy/build.sh -p '${env.CI_PROJECT_NAME}'"
+					}
+					stage ("test") {
+						withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
+														usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
+								sh script: "${WORKSPACE}/.deploy/test.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o ${env.CI_DOCKER_ORGANIZATION}"
 						}
-						stage ("build") {
-								sh script: "${WORKSPACE}/.deploy/build.sh -p '${env.CI_PROJECT_NAME}'"
-						}
-						stage ("test") {
-								withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
-																usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
-										sh script: "${WORKSPACE}/.deploy/test.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o ${env.CI_DOCKER_ORGANIZATION}"
-								}
-						}
-						stage ("deploy") {
-								sh script: "${WORKSPACE}/.deploy/deploy.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -f"
-						}
-						stage ('publish') {
-								// this only will publish if the incominh branch IS develop
-								Branch.publish_to_master(this)
-								Pipeline.publish_buildInfo(this)
-						}
-				} catch(err) {
-					currentBuild.result = "FAILURE"
-					errorMessage = err.message
-					throw err
-				}
-				finally {
-					Pipeline.finish(this, currentBuild.result, errorMessage)
-				}
+					}
+					stage ("deploy") {
+						sh script: "${WORKSPACE}/.deploy/deploy.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -f"
+					}
+					stage ('publish') {
+						// this only will publish if the incominh branch IS develop
+						Branch.publish_to_master(this)
+						Pipeline.publish_buildInfo(this)
+					}
+			} catch(err) {
+				currentBuild.result = "FAILURE"
+				errorMessage = err.message
+				throw err
+			}
+			finally {
+				Pipeline.finish(this, currentBuild.result, errorMessage)
+			}
 		}
 	}
 }
