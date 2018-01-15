@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -e;
+exit 99;
 
 base_dir=$(dirname "$0");
 # shellcheck source=/dev/null

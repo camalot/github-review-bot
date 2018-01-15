@@ -11,38 +11,45 @@ let getComments = (repo, number) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		let allComments = [];
-		github.issues.getComments({
-			owner: config.organization,
-			repo: repo,
-			number: number,
-			per_page: 100
-		}, (err, results) => {
-			if(err) {
-				return reject(err);
-			}
-			let currentResults = results;
-			allComments = allComments.concat(results);
-			async.whilst(()=> {
-				// if there are more pages
-				return github.hasNextPage(currentResults);
-			}, (next) => {
-				// each iteration
-				if(err) {
-					console.error(err);
-					return next(err);
+		github.issues.getComments(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: number,
+				per_page: 100
+			},
+			(err, results) => {
+				if (err) {
+					return reject(err);
 				}
-				currentResults = results;
+				let currentResults = results;
 				allComments = allComments.concat(results);
-				next(null, results);
-			}, (err, results) => {
-				// done
-				if(err) {
-					reject(err);
-				} else {
-					resolve(allComments);
-				}
-			});
-		});
+				async.whilst(
+					() => {
+						// if there are more pages
+						return github.hasNextPage(currentResults);
+					},
+					next => {
+						// each iteration
+						if (err) {
+							console.error(err);
+							return next(err);
+						}
+						currentResults = results;
+						allComments = allComments.concat(results);
+						next(null, results);
+					},
+					(err, results) => {
+						// done
+						if (err) {
+							reject(err);
+						} else {
+							resolve(allComments);
+						}
+					}
+				);
+			}
+		);
 	});
 }
 
@@ -67,39 +74,45 @@ let getCommentsSince = (repo, number, date) => {
 let getLabels = (repo, number) => {
 	return new Promise(function(resolve, reject) {
 		auth.authenticate();
-		github.issues.getIssueLabels({
-			owner: config.organization,
-			repo: repo,
-			number: number
-		}, function(err, result) {
-			if(err) {
-				reject(err);
-			} else {
-				resolve(result);
+		github.issues.getIssueLabels(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: number
+			},
+			function(err, result) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
 			}
-		});
+		);
 	});
 }
 
 let edit = (repo, number, data) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
-		github.issues.edit({
-			owner: config.organization,
-			repo: repo,
-			number: number,
-			labels: data.labels ? data.labels : undefined,
-			title: data.title ? data.title : undefined,
-			body: data.body ? data.body : undefined,
-			assignee: data.assignee ? data.assignee : undefined,
-			assignees: data.assignees ? data.assignees : undefined,
-		}, function(err, result) {
-			if(err) {
-				reject(err)
-			} else {
-				resolve(result);
+		github.issues.edit(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: number,
+				labels: data.labels ? data.labels : undefined,
+				title: data.title ? data.title : undefined,
+				body: data.body ? data.body : undefined,
+				assignee: data.assignee ? data.assignee : undefined,
+				assignees: data.assignees ? data.assignees : undefined
+			},
+			function(err, result) {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(result);
+				}
 			}
-		});
+		);
 	});
 };
 

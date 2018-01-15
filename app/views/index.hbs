@@ -1,0 +1,57 @@
+
+{{#section 'head'}} {{/section}}
+
+<section class="section--center mdl-grid">
+	<div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+		<div class="mdl-card__title mdl-card--border">
+			<h2 class="mdl-card__title-text">Peer Review Bot</h2>
+		</div>
+		<div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+			<p>This was originally based off the&nbsp;
+				<a href="https://github.com/felixrieseberg/peer-review-bot">
+					<code>peer-review-bot</code>
+				</a>by&nbsp;
+				<a href="https://github.com/felixrieseberg">Felix Rieseberg</a>.</p>
+			<p>
+				This is a node.js bot that checks repositories for Pull Requests to see if they the appropriate number of reviews. It will
+				automatically label, and merge the PRs.
+			</p>
+			<p>
+				Peer Review Bot responds to Github WebHooks and labels PRs as 'needs-review' or as 'peer-reviewed', depending on how many
+				people had commented with a 'LGTM' or ':+1:'.
+			</p>
+			<p>
+				If anyone replies with 'needs work', or ':-1:' it will not 'move ahead' with the merge until that person follows up with
+				'LGTM' or ':+1:'.
+			</p>
+			<p>
+				Once you create a Pull Request, in a repository that Peer Review Bot is monitoring, it will comment on the Pull Request on
+				how things work.
+			</p>
+			<p>
+				<img src="http://i.imgur.com/TyNYxU9.png" title="Initial Comment" />
+			</p>
+			<p>
+				Peer Review Bot also registers with Github as a status. This will allow you to configure your repository to prevent the merge
+				from being performed, unless the reviews are met.
+			</p>
+			<p>
+				<img src="http://i.imgur.com/VlsZ7dU.png" title="Status" />
+			</p>
+			<p>Don't think you can fool Peer Review Bot by just voting on your own Pull Request,
+				<he>does not like that.</he>
+			</p>
+			<p>
+				<img src="http://i.imgur.com/Fb6VGdY.png" title="Shame" />
+			</p>
+			<p>Once the Pull Request has the needed number of reviews, Peer Review Bot will
+				<update>the check status as Passed.</update>
+			</p>
+			<p>
+				<img src="http://i.imgur.com/QkQhKXC.png" title="Passed" />
+			</p>
+		</div>
+	</div>
+</section>
+
+ {{#section 'scripts'}} {{/section}}

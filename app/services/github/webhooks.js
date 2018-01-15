@@ -11,42 +11,49 @@ let getAll = (repo) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		let allHooks = [];
-		github.repos.getHooks({
-			owner: config.organization,
-			per_page: 100,
-			repo: repo.name
-		}, (err, results) => {
-			if (err) {
-				return reject(err);
-			}
-			let currentResults = results;
-			allHooks = allHooks.concat(results);
-			async.whilst(() => {
-				// if there are more pages
-				return github.hasNextPage(currentResults);
-			}, (next) => {
-				// each iteration
-				github.getNextPage(currentResults, (err, results) => {
-					if (err) {
-						console.error(err);
-						return next(err);
-					}
-					currentResults = results;
-					allHooks = allHooks.concat(results);
-					next(null, results);
-				})
-			}, (err, results) => {
-				// done
+		github.repos.getHooks(
+			{
+				owner: config.github.organization,
+				per_page: 100,
+				repo: repo.name
+			},
+			(err, results) => {
 				if (err) {
-					reject(err);
-				} else {
-					resolve({
-						repo: repo,
-						hooks: allHooks
-					});
+					return reject(err);
 				}
-			});
-		});
+				let currentResults = results;
+				allHooks = allHooks.concat(results);
+				async.whilst(
+					() => {
+						// if there are more pages
+						return github.hasNextPage(currentResults);
+					},
+					next => {
+						// each iteration
+						github.getNextPage(currentResults, (err, results) => {
+							if (err) {
+								console.error(err);
+								return next(err);
+							}
+							currentResults = results;
+							allHooks = allHooks.concat(results);
+							next(null, results);
+						});
+					},
+					(err, results) => {
+						// done
+						if (err) {
+							reject(err);
+						} else {
+							resolve({
+								repo: repo,
+								hooks: allHooks
+							});
+						}
+					}
+				);
+			}
+		);
 	});
 }
 
@@ -86,22 +93,25 @@ let filterBotHooks = (repoName, hooks) => {
 let createWebHook = (repo, url, events) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
-		github.repos.createHook({
-			owner: config.organization,
-			repo: repo,
-			name: "web",
-			config: {
-				content_type: "json",
-				url: url,
-				secret: config.webhookSecret
+		github.repos.createHook(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				name: "web",
+				config: {
+					content_type: "json",
+					url: url,
+					secret: config.webhookSecret
+				},
+				events: events
 			},
-			events: events
-		}, function(err, result) {
-			if (err) {
-				return reject(err);
+			function(err, result) {
+				if (err) {
+					return reject(err);
+				}
+				resolve(result);
 			}
-			resolve(result);
-		});
+		);
 	});
 };
 
@@ -109,7 +119,7 @@ let deleteWebHook = (repo, id) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		github.repos.deleteHook({
-			owner: config.organization,
+			owner: config.github.organization,
 			repo: repo,
 			id: id
 		}, (err, reply) => {
@@ -125,48 +135,62 @@ let getWebHookId = (repo, action) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		let result = null;
-		github.repos.getHooks({
-			owner: config.organization,
-			repo: repo
-		}, (err, hooks) => {
-			if(err) {
-				// we just return nothing
-				return resolve(null);
-			}
-			async.each(hooks, (item, next) => {
-				if (hook.name === 'web' && hook.config.url.match(config.botUrlRoot + action)) {
-					result = hook.id;
-				}
-				next();
-			}, (err) => { // done
-				if(err) {
+		github.repos.getHooks(
+			{
+				owner: config.github.organization,
+				repo: repo
+			},
+			(err, hooks) => {
+				if (err) {
+					// we just return nothing
 					return resolve(null);
 				}
-				resolve(result);
-			});
-		});
+				async.each(
+					hooks,
+					(item, next) => {
+						if (
+							hook.name === "web" &&
+							hook.config.url.match(config.botUrlRoot + action)
+						) {
+							result = hook.id;
+						}
+						next();
+					},
+					err => {
+						// done
+						if (err) {
+							return resolve(null);
+						}
+						resolve(result);
+					}
+				);
+			}
+		);
 	});
 };
 
 let createStatus = (repo, status, sha, description, callback) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
-		github.repos.createStatus({
-			owner: config.organization,
-			repo: repo,
-			state: status,
-			sha: sha,
-			context: "Peer Review Bot",
-			description: description
-			/*,
+		github.repos.createStatus(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				state: status,
+				sha: sha,
+				context: "Peer Review Bot",
+				description: description
+				/*,
 					target_url: config.botUrlRoot + "/pr-status/" + repo + "/" + pr.id*/
-		}, (err, reply) => {
-			if(err) {
-				reject(err);
-			} else {
-				resolve(reply);
+			},
+			(err, reply) => {
+				if (err) {
+					reject(err);
+				} else {
+					resolve(reply);
+				}
 			}
-		});
+		);
 	});
 };
 

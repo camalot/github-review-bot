@@ -11,17 +11,20 @@ let getForPullRequest = (repo, prNumber) => {
 		if (!config.enableReactions) {
 			return resolve([]);
 		}
-		github.reactions.getForIssue({
-			owner: config.organization,
-			repo: repo,
-			number: prNumber
-		}, (err, res) => {
-			if (err) {
-				console.error(err);
-				return reject(err);
+		github.reactions.getForIssue(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: prNumber
+			},
+			(err, res) => {
+				if (err) {
+					console.error(err);
+					return reject(err);
+				}
+				return resolve(res);
 			}
-			return resolve(res);
-		});
+		);
 	});
 }
 
