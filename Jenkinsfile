@@ -38,13 +38,13 @@ node ("docker") {
 			try {
 					stage ("install" ) {
 						deleteDir()
-						env.GRB_WEBHOOK_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_WEBHOOK_SECRET")
-						env.GRB_AUTH_CLIENT_SECRET = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_SECRET")
-						env.GRB_ACCESS_TOKEN = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ACCESS_TOKEN")
-						env.GRB_ORGANIZATION = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_ORGANIZATION")
-						env.GRB_AUTH_CLIENT_ID = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_AUTH_CLIENT_ID")
-						env.GRB_BOT_USERNAME = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_USERNAME")
-						env.GRB_BOT_URL = com.bit13.jenkins.Vault.getSecret(this, "secret", "GRB_BOT_URL")
+						env.GRB_WEBHOOK_SECRET = SecretsVault.get(this, "secret", "GRB_WEBHOOK_SECRET")
+						env.GRB_AUTH_CLIENT_SECRET = SecretsVault.get(this, "secret", "GRB_AUTH_CLIENT_SECRET")
+						env.GRB_ACCESS_TOKEN = SecretsVault.get(this, "secret", "GRB_ACCESS_TOKEN")
+						env.GRB_ORGANIZATION = SecretsVault.get(this, "secret", "GRB_ORGANIZATION")
+						env.GRB_AUTH_CLIENT_ID = SecretsVault.get(this, "secret", "GRB_AUTH_CLIENT_ID")
+						env.GRB_BOT_USERNAME = SecretsVault.get(this, "secret", "GRB_BOT_USERNAME")
+						env.GRB_BOT_URL = SecretsVault.get(this, "secret", "GRB_BOT_URL")
 
 						Branch.checkout(this, env.CI_PROJECT_NAME)
 						Pipeline.install(this)
