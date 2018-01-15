@@ -11,8 +11,7 @@ const _ = require("lodash");
 const async = require("async");
 
 let requireLoggedIn = () => {
-	return true;
-	//return require('connect-ensure-login').ensureLoggedIn(loginRoute);
+	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
 };
 
 let _render = (req, res, data) => {
@@ -23,7 +22,7 @@ let _render = (req, res, data) => {
 	res.render("managed", dataObject);
 };
 
-router.get("/", requireLoggedIn(), (req, res, next) => {
+router.get("/", (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
