@@ -22,7 +22,7 @@ let _render = (req, res, data) => {
 	res.render('nonmanaged', dataObject);
 };
 
-router.get('/',  (req, res, next) => {
+router.get('/', requireLoggedIn(), (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then((allowed) => {
 		if (!allowed) {
 			console.log("not Authorized");

@@ -13,7 +13,7 @@ let requireLoggedIn = () => {
 };
 
 /* GET home page. */
-router.get('/', (req, res) => {
+router.get('/', requireLoggedIn(), (req, res) => {
 	github.auth.isUserInOrganization(req.user).then((allowed) => {
 		if (!allowed) {
 			console.log("not Authorized");
@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
 	});
 });
 
-router.get('/:repo', (req, res) => {
+router.get('/:repo', requireLoggedIn(), (req, res) => {
 	github.auth.isUserInOrganization(req.user).then((allowed) => {
 		if (!allowed) {
 			let err = new Error('Not Authorized.');
@@ -57,7 +57,7 @@ router.get('/:repo', (req, res) => {
 	});
 });
 
-router.post('/enforce/:repo', (req, res) => {
+router.post('/enforce/:repo', requireLoggedIn(), (req, res) => {
 	github.auth.isUserInOrganization(req.user).then((allowed) => {
 		if (!allowed) {
 			let err = new Error('Not Authorized.');
@@ -76,7 +76,7 @@ router.post('/enforce/:repo', (req, res) => {
 	});
 });
 
-router.get('/unenforce/:repo', (req, res) => {
+router.get('/unenforce/:repo', requireLoggedIn(), (req, res) => {
 	github.auth.isUserInOrganization(req.user).then((allowed) => {
 		if (!allowed) {
 			let err = new Error('Not Authorized.');
