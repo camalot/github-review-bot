@@ -9,11 +9,10 @@ const loginRoute = "/login";
 const Promise = require("promise");
 
 var requireLoggedIn = function() {
-	return true;
-	//return require('connect-ensure-login').ensureLoggedIn(loginRoute);
+	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
 };
 
-router.post("/:ref", requireLoggedIn(), _handleDeploymentEvent);
+router.post("/:ref", _handleDeploymentEvent);
 
 function _handleDeploymentEvent(req, res) {
 	var ref = req.params.ref;

@@ -9,12 +9,11 @@ const loginRoute = "/login";
 const Promise = require("promise");
 
 let requireLoggedIn = () => {
-	return true;
-	//return require('connect-ensure-login').ensureLoggedIn(loginRoute);
+	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
 };
 
 /* GET home page. */
-router.get("/", requireLoggedIn(), (req, res, next) => {
+router.get("/", (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
