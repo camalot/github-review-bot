@@ -9,7 +9,8 @@ const Promise = require('promise');
 const async = require('async');
 
 let requireLoggedIn = () => {
-	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
+	return true;
+	//return require('connect-ensure-login').ensureLoggedIn(loginRoute);
 };
 
 /* GET home page. */
