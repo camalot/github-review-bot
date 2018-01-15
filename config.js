@@ -21,6 +21,9 @@ config.github = {
 	// oAuth client secret
 	authClientSecret: process.env.GRB_AUTH_CLIENT_SECRET
 };
+
+console.log(config.github.authClientID);
+
 // the base url for the bot
 config.botUrlRoot = process.env.GRB_BOT_URL;
 

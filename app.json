@@ -11,7 +11,7 @@
     },
     "GRB_WEBHOOK_SECRET": {
       "description": "A secret token that is provided to Github for verification",
-			"generator": "secret",
+			"generator": "secret"
     },
 		"GRB_BOT_URL": {
       "description": "The base url for the callbacks to the bot",
