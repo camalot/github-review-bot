@@ -25,21 +25,19 @@ function authenticate() {
 let isUserInOrganization = user => {
 	return new Promise((resolve, reject) => {
 		authenticate();
-		if (user.username == config.organization) {
-			resolve(true);
-		} else {
-			github.orgs.getOrgMembership({
-					org: config.organization,
-					username: user.username
-				}, (err, result) => {
-					if (err) {
-						resolve(false);
-					} else {
-						resolve(true);
-					}
+
+		github.orgs.getOrgMembership({
+				org: config.organization,
+				username: user.username
+			},
+			(err, result) => {
+				if (err) {
+					resolve(false);
+				} else {
+					resolve(true);
 				}
-			);
-		}
+			}
+		);
 	});
 };
 

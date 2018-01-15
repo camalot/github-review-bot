@@ -1,0 +1,9 @@
+coverage
+flow-typed
+node_modules/
+lib*
+dist/
+test/*
+## Temporary
+examples
+.deploy/
