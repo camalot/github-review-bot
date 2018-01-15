@@ -22,22 +22,22 @@ const nonmanaged = require('./routes/nonmanaged');
 const session = require('express-session');
 const app = express();
 
-if(config.github.authClientID && config.github.authClientSecret) {
-  passport.use(new Strategy({
-    clientID: config.github.authClientID,
-    clientSecret: config.github.authClientSecret,
-    callbackURL: config.botUrlRoot + "/login/auth/return"
-  }, function (accessToken, refreshToken, profile, callback) {
-    callback(null,profile);
-  }));
-  passport.serializeUser(function(user, cb) {
-    cb(null, user);
-  });
+// if(config.github.authClientID && config.github.authClientSecret) {
+//   passport.use(new Strategy({
+//     clientID: config.github.authClientID,
+//     clientSecret: config.github.authClientSecret,
+//     callbackURL: config.botUrlRoot + "/login/auth/return"
+//   }, function (accessToken, refreshToken, profile, callback) {
+//     callback(null,profile);
+//   }));
+//   passport.serializeUser(function(user, cb) {
+//     cb(null, user);
+//   });
 
-  passport.deserializeUser(function(obj, cb) {
-    cb(null, obj);
-  });
-}
+//   passport.deserializeUser(function(obj, cb) {
+//     cb(null, obj);
+//   });
+// }
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -57,10 +57,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }));
-if(config.github.authClientID && config.github.authClientSecret) {
-  app.use(passport.initialize());
-  app.use(passport.session());
-}
+// if(config.github.authClientID && config.github.authClientSecret) {
+//   app.use(passport.initialize());
+//   app.use(passport.session());
+// }
 app.use('/', routes);
 app.use('/pullrequest', pullrequest);
 app.use('/repository', repository);
@@ -70,9 +70,9 @@ app.use('/nonmanaged', nonmanaged);
 app.use('/repos', repos);
 app.use('/audit', audit);
 
-if(config.github.authClientID && config.github.authClientSecret) {
-  app.use('/login', login);
-}
+// if(config.github.authClientID && config.github.authClientSecret) {
+//   app.use('/login', login);
+// }
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {

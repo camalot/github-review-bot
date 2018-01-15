@@ -1,4 +1,14 @@
+.deploy/
 .git/
+test/
 .gitignore
 node_modules/
 .editorconfig
+
+.env
+*.env
+app.yaml
+*.cmd
+azuredeploy.json
+iisnode.yaml
+Gruntfile.js
