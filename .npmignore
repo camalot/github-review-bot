@@ -1,0 +1,10 @@
+.deploy/
+.editorconfig
+app.yaml
+app.json
+azuredeploy.json
+iisnode.yaml
+Gruntfile.json
+
+.env
+*.env

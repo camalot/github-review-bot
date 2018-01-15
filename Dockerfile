@@ -29,11 +29,11 @@ LABEL \
 
 EXPOSE 3000
 
-COPY . /app
-WORKDIR /app
+COPY . /grb
+WORKDIR /grb
 
 RUN \
-	chown -R "${VUSER}:${VGROUP}" /app
+	chown -R "${VUSER}:${VGROUP}" /grb
 
 USER ${VUSER}
 
