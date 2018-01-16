@@ -1,11 +1,11 @@
+'use strict';
 /**
  * This will set create labels, and set defaults on the repo when created.
 */
-var githubApi = require('../github'),
-	github = githubApi.service,
-	debug = require('debug')('review:bot'),
-
-	config = require('../../config')
+const githubApi = require('../github');
+const github = githubApi.service;
+const debug = require('debug')('review:bot');
+const config = require('../../config');
 
 config.repo_defaults = {
 	has_issues: false,
@@ -15,7 +15,7 @@ config.repo_defaults = {
 	//default_branch: 'develop',
 
 	labels: [
-		{name: 'needs-peer-review', color: 'd93f0b'},
+		{name: 'needs-review', color: 'd93f0b'},
 		{name: 'needs-work', color: 'ee0701'},
 		{name: 'peer-reviewed', color: '0e8a16'}
 	]

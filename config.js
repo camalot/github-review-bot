@@ -8,6 +8,8 @@ var config = {};
 // or have them loaded into the environment
 
 config.github = {
+	// if the organization is a user account, and not an organization, set this to true
+	manageUserRepos: (process.env.GRB_ISUSER_ACCOUNT || "false").toLowerCase().trim() === "true",
 	// the github organization
 	organization: process.env.GRB_ORGANIZATION,
 	// the username for the bot
@@ -28,7 +30,7 @@ console.log(config.github.authClientID);
 config.botUrlRoot = process.env.GRB_BOT_URL;
 
 // the label that indicates the PR needs review
-config.labelNeedsReview = process.env.GRB_NEEDS_REVIEW_LABEL || 'needs-peer-review';
+config.labelNeedsReview = process.env.GRB_NEEDS_REVIEW_LABEL || 'needs-review';
 // the label that indicates that the PR has been reviewed.
 config.labelPeerReviewed = process.env.GRB_PEER_REVIEWED_LABEL || 'peer-reviewed';
 // the label that indicates that someone wants more work before approving

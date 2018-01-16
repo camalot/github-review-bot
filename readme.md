@@ -51,6 +51,7 @@ values are then loaded into the environment when the bot initializes.
 - `env[GRB_BOT_USERNAME]` : The github username for the bot
 - `env[GRB_ACCESS_TOKEN]` : A personal access token that is used to authenticate the user
 - `env[GRB_ORGANIZATION]` : The github organization name
+- `env[GRB_ISUSER_ACCOUNT]` : Indicates if `GRB_ORGANIZATION` should be treated as a user account instead of an org.
 - `env[GRB_BOT_URL]` : The base url for the callbacks to the bot
 - `env[GRB_WEBHOOK_SECRET]` : A secret token that is provided to Github for verification
 - `env[GRB_AUTH_CLIENT_ID]` : Github oAuth2 client id
@@ -71,11 +72,11 @@ You need to set Application Settings for the following:
 - `GRB_BOT_USERNAME` : The github username for the bot
 - `GRB_ACCESS_TOKEN` : A personal access token that is used to authenticate the user
 - `GRB_ORGANIZATION` : The github organization name
+- `GRB_ISUSER_ACCOUNT` : Indicates if `GRB_ORGANIZATION` should be treated as a user account instead of an org.
 - `GRB_BOT_URL` : The base url for the callbacks to the bot
 - `GRB_WEBHOOK_SECRET` : A secret token that is provided to Github for verification
 - `GRB_AUTH_CLIENT_ID` : Github oAuth2 client id
 - `GRB_AUTH_CLIENT_SECRET`: Github oAuth2 client secret
-
 ###### Optional
 
 - `WEBSITE_NODE_DEFAULT_VERSION` : The version of NodeJS to use.
@@ -95,6 +96,7 @@ You need to set Application Settings for the following:
 - `GRB_BOT_USERNAME` : The github username for the bot
 - `GRB_ACCESS_TOKEN` : A personal access token that is used to authenticate the user
 - `GRB_ORGANIZATION` : The github organization name
+- `GRB_ISUSER_ACCOUNT` : Indicates if `GRB_ORGANIZATION` should be treated as a user account instead of an org.
 - `GRB_BOT_URL` : The base url for the callbacks to the bot
 - `GRB_WEBHOOK_SECRET` : A secret token that is provided to Github for verification
 - `GRB_AUTH_CLIENT_ID` : Github oAuth2 client id
