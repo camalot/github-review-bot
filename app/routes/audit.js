@@ -24,9 +24,7 @@ router.get("/", requireLoggedIn(), function(req, res, next) {
 			}
 			github.users.getAll("2fa_disabled").then(
 				result => {
-					res.render("audit", {
-						users: result
-					});
+					res.render("audit", { users: result, title: "User Audit" });
 				},
 				err => {
 					return next(err);

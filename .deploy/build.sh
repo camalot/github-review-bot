@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
 set -e;
-exit 99;
 
 base_dir=$(dirname "$0");
 # shellcheck source=/dev/null
 source "${base_dir}/shared.sh";
 
 get_opts() {
-	while getopts ":p:f" opt; do
+	while getopts ":n:o:v:f" opt; do
 	  case $opt in
-			p) export opt_project_name="$OPTARG";
+			n) export opt_project_name="$OPTARG";
+			;;
+			o) export opt_organization="$OPTARG";
+			;;
+			v) export opt_version="$OPTARG";
 			;;
 			f) export opt_force="--no-cache ";
 			;;
@@ -25,29 +28,30 @@ get_opts() {
 
 get_opts "$@";
 
-project="${opt_project_name:-"${CI_PROJECT_NAME}"}";
-push_registry="${DOCKER_PUSH_REGISTRY}"
-BUILD_VERSION=${CI_BUILD_VERSION:-"1.0.0-snapshot"};
+BUILD_PROJECT="${opt_project_name:-"${CI_PROJECT_NAME}"}";
+PUSH_REGISTRY="${DOCKER_PUSH_REGISTRY}"
+BUILD_VERSION="${opt_version:-"${CI_BUILD_VERSION:-"1.0.0-snapshot"}"}";
+BUILD_ORGANIZATION="${opt_organization:-"camalot"}";
 
-[[ -z "${DOCKER_PUSH_REGISTRY// }" ]] && __error "Environment Variable 'DOCKER_PUSH_REGISTRY' was not defined";
-[[ -z "${project// }" ]] && __error "Environment Variable 'CI_PROJECT_NAME' was not defined, and project argument (-p) was not defined.";
+[[ -z "${PUSH_REGISTRY// }" ]] && __error "Environment Variable 'DOCKER_PUSH_REGISTRY' was not defined";
+[[ -z "${BUILD_PROJECT// }" ]] && __error "Environment Variable 'CI_PROJECT_NAME' was not defined, and project argument (-p) was not defined.";
+[[ -z "${BUILD_ORGANIZATION// }" ]] && __error "Environment Variable 'CI_PROJECT_NAME' was not defined, and project argument (-p) was not defined.";
 
-org="camalot";
-tag="${org}/${project}";
+tag="${BUILD_ORGANIZATION}/${BUILD_PROJECT}";
 
 tag_name_latest="${tag}:latest";
 tag_name_ver="${tag}:${BUILD_VERSION}";
 
 docker build ${opt_force}--pull \
 	--build-arg BUILD_VERSION="${BUILD_VERSION}" \
-	--build-arg PORJECT_NAME="${project}" \
+	--build-arg PROJECT_NAME="${BUILD_PROJECT}" \
 	--tag "${tag_name_ver}" \
 	"${base_dir}/../";
 
 [[ ! $BUILD_VERSION =~ -snapshot$ ]] && \
 	docker tag "${tag_name_ver}" "${tag_name_latest}" && \
-	docker tag "${tag_name_ver}" "${push_registry}/${tag_name_latest}" && \
-	docker push "${push_registry}/${tag_name_latest}";
+	docker tag "${tag_name_ver}" "${PUSH_REGISTRY}/${tag_name_latest}" && \
+	docker push "${PUSH_REGISTRY}/${tag_name_latest}";
 
-docker tag "${tag_name_ver}" "${push_registry}/${tag_name_ver}";
-docker push "${push_registry}/${tag_name_ver}";
+docker tag "${tag_name_ver}" "${PUSH_REGISTRY}/${tag_name_ver}";
+docker push "${PUSH_REGISTRY}/${tag_name_ver}";

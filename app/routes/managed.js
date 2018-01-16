@@ -17,7 +17,8 @@ let requireLoggedIn = () => {
 let _render = (req, res, data) => {
 	let dataObject = {
 		repos: data,
-		user: req.user
+		user: req.user,
+		title: "Managed Repositories"
 	};
 	res.render("managed", dataObject);
 };
@@ -29,7 +30,7 @@ router.get("/", (req, res, next) => {
 				console.log("not Authorized");
 				let err = new Error("Not Authorized.");
 				err.status = 403;
-				throw err;
+				return next(err);
 			}
 			let managedList = [];
 			github.repos.getAll().then(
@@ -39,6 +40,7 @@ router.get("/", (req, res, next) => {
 							repos,
 							(item, nextRepo) => {
 								// each
+console.log(item);
 								github.webhooks.getAll(item).then(
 									data => {
 										let repo = data.repo;
@@ -81,7 +83,7 @@ router.get("/", (req, res, next) => {
 									},
 									err => {
 										console.error(err);
-										throw err;
+										return next(err);
 									}
 								);
 							},
@@ -89,7 +91,7 @@ router.get("/", (req, res, next) => {
 								// done repos.each
 								if (err) {
 									console.error(err);
-									throw err;
+									return next(err);
 								}
 								let sorted = _.orderBy(
 									managedList,
@@ -105,18 +107,18 @@ router.get("/", (req, res, next) => {
 						);
 					} catch (ex) {
 						console.error(ex);
-						throw ex;
+						return next(err);
 					}
 				},
 				err => {
 					console.error(err);
-					throw err;
+					return next(err);
 				}
 			);
 		},
 		err => {
 			console.error(err);
-			throw err;
+			return next(err);
 		}
 	);
 });

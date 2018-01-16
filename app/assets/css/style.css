@@ -1,6 +1,11 @@
+html,
 body {
-
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto', 'Helvetica', sans-serif;
 }
+
+
 .layout-waterfall .mdl-layout__header-row .mdl-navigation__link:last-of-type  {
   padding-right: 0;
 }
@@ -35,3 +40,8 @@ body {
 .align-right {
 	text-align: right;
 }
+
+.mdl-layout__header-row h3 {
+	text-transform: uppercase;
+}
+

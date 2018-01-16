@@ -1,0 +1,36 @@
+{{#section 'title'}}User Audit{{/section}} {{#section 'head'}} {{/section}}
+
+<div class="nav-bar">
+	<a class="mdl-button mdl-button--icon mdl-button--colored  mdl-button--fab mdl-js-button mdl-js-ripple-effect" href="/">
+		<i class="material-icons">arrow_back</i>
+	</a>
+</div>
+
+<section class="section--center mdl-grid">
+	<div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+		<div class="mdl-card__title mdl-card--border">
+			<h2 class="mdl-card__title-text">{{title}}</h2>
+		</div>
+
+		<div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+			<p class="mdl-list__item-text-body">This is a list of all users in the organization that do not have 2-factor authentication enabled.</p>
+
+			{{#if user}}
+			<ul class="mdl-list">
+				{{#each users}}
+				<li class="mdl-list__item">
+					<span class="mdl-list__item-primary-content">
+						<img class="mdl-list__item-avatar" src="{{this.avatar_url}}" />
+						<a class="mdl-list__item-secondary-action" href="{{this.html_url}}"></a>
+					</span>
+				</li>
+				{{/each}}
+			</ul>
+			{{else}}
+			<h3>All users have 2-factor authentication enabled.</h3>
+			{{/if}}
+
+		</div>
+	</div>
+
+</section>

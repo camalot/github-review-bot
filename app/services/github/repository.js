@@ -20,7 +20,7 @@ let get = (repo) => {
 					console.error(err);
 					return reject(err);
 				}
-				return resolve(res);
+				return resolve(res.data);
 			}
 		);
 	});
@@ -42,7 +42,7 @@ let getAll = () => {
 					return reject(err);
 				}
 				let currentResults = results;
-				allRepos = allRepos.concat(results);
+				allRepos = allRepos.concat(results.data);
 				async.whilst(
 					() => {
 						// if there are more pages
@@ -56,7 +56,7 @@ let getAll = () => {
 								return next(err);
 							}
 							currentResults = results;
-							allRepos = allRepos.concat(results);
+							allRepos = allRepos.concat(results.data);
 							next(null, results);
 						});
 					},
@@ -66,7 +66,6 @@ let getAll = () => {
 							console.error(err);
 							reject(err);
 						} else {
-							console.log(allRepos);
 							resolve(allRepos);
 						}
 					}

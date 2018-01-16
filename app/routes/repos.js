@@ -27,7 +27,8 @@ router.get("/", requireLoggedIn(), (req, res, next) => {
 				result => {
 					res.render("repos", {
 						repos: result,
-						owner: req.user
+						owner: req.user,
+						title: "Repositories"
 					});
 				},
 				err => {
@@ -54,7 +55,8 @@ router.get("/:repo", requireLoggedIn(), (req, res, next) => {
 				result => {
 					res.render("repo-edit", {
 						repo: result,
-						user: req.user
+						user: req.user,
+						title: `Edit: ${result.name}`
 					});
 				},
 				err => {

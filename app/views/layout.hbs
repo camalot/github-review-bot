@@ -21,18 +21,15 @@
 		<div class="android-header mdl-layout__header mdl-layout__header--waterfall mdl-color--blue-400">
 			<div class="mdl-layout__header-row">
 				<h3>
-					<img src="/assets//images/favicon48.png" style="vertical-align: text-bottom" />{{title}}</h3>
+					<img src="/assets/images/favicon48.png" style="vertical-align: text-bottom" />{{title}}</h3>
 				<div class="mdl-layout-spacer"></div>
-				{{#if locals.user}}
-				<label class="mdl-button mdl-js-button mdl-button--icon" data-upgraded=",MaterialButton" title="notifications">
-					<i class="mdi mdi-bell-outline">alert</i>
-				</label>
+				{{#if user}}
 
-				<a class="mdl-button mdl-js-button mdl-button--icon" data-upgraded=",MaterialButton" href="/me">
-					<img src="https://gravatar.com/avatar/{{locals.user.gravatar}}?size=32" />
+				<a class="mdl-button mdl-js-button mdl-button--icon" href="/me">
+					<img src="{{user._json.avatar_url}}" style="height: 32px; width: 32px;" />
 				</a>
-				<a class="mdl-button mdl-js-button mdl-button--icon" data-upgraded=",MaterialButton" href="/logout" title="logout">
-					<i class="mdi mdi-logout">logout</i>
+				<a class="mdl-button mdl-js-button mdl-button--icon" href="/logout" title="logout">
+					<i class="mdi mdi-logout" style="width: 16px">logout</i>
 				</a>
 				{{else}}
 				<a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--indigo-50 mdl-color-text--black"
