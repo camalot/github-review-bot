@@ -18,6 +18,7 @@ ENV GRB_BOT_URL=""
 ENV GRB_AUTH_CLIENT_ID=""
 ENV GRB_AUTH_CLIENT_SECRET=""
 ENV GRB_BOT_USERNAME=""
+ENV GRB_ISUSER_ACCOUNT="false"
 
 RUN addgroup "${VGROUP}" -g "${PGID}" && \
 	adduser -S -G "${VGROUP}" -u "${PUID}" "${VUSER}"

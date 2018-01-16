@@ -30,7 +30,11 @@ let getAll = () => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		let allRepos = [];
-		github.repos.getForOrg(
+
+		// if this is a user account vs org
+		method = config.github.manageUserRepos ? "getForUser" : "getForOrg";
+
+		github.repos[method](
 			{
 				org: config.github.organization,
 				per_page: 100,

@@ -11,10 +11,10 @@ __warning() {
 	YELLOW='\033[0;33m';
 	NC='\033[0m';
 	dt=$(date "+%F %T");
-	(>&2 echo -e "${YELLOW}[$dt]\WARNING\t$(basename $0)\t${1:-"Unknown Warning"}${NC}");
+	(>&2 echo -e "${YELLOW}[$dt]\tWARNING\t$(basename $0)\t${1:-"Unknown Warning"}${NC}");
 }
 __info() {
 	NC='\033[0m';
 	dt=$(date "+%F %T");
-	(>&2 echo -e "${NC}[$dt]\INFO\t$(basename $0)\t${1:-"Unknown Message"}${NC}");
+	(>&2 echo -e "${NC}[$dt]\tINFO\t$(basename $0)\t${1:-"Unknown Message"}${NC}");
 }

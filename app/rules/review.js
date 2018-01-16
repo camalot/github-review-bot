@@ -1,8 +1,10 @@
-var moduleName = "Review",
-	githubApi = require('../github'),
-	github = githubApi.service,
-	debug = require('debug')('review:bot'),
-	config = require('../../config');
+'use strict';
+
+const moduleName = "Review";
+const githubApi = require('../github');
+const github = githubApi.service;
+const debug = require('debug')('review:bot');
+const config = require('../../config');
 
 function beginProcessing (prNumber, repo, pr, action, callback) {
 }

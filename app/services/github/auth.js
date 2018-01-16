@@ -24,6 +24,12 @@ function authenticate() {
 let isUserInOrganization = function(user) {
 	return new Promise((resolve, reject) => {
 		authenticate();
+
+		// need to check if user can manage the repos...
+		if (config.github.manageUserRepos) {
+			return user.username === config.github.organization;
+		}
+
 		github.orgs.getOrgMembership(
 			{
 				org: config.github.organization,
@@ -44,8 +50,8 @@ let isXHubValid = req => {
 	return new Promise((resolve, reject) => {
 		if (
 			!req.isXHub ||
-			config.webhookSecret == "" ||
-			config.webhookSecret == null
+			config.github.webhookSecret == "" ||
+			config.github.webhookSecret == null
 		) {
 			resolve(true);
 		}

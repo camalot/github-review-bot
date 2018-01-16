@@ -101,7 +101,7 @@ let createWebHook = (repo, url, events) => {
 				config: {
 					content_type: "json",
 					url: url,
-					secret: config.webhookSecret
+					secret: config.github.webhookSecret
 				},
 				events: events
 			},
