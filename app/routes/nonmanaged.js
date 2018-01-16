@@ -28,7 +28,7 @@ router.get('/', requireLoggedIn(), (req, res, next) => {
 			console.log("not Authorized");
 			let err = new Error('Not Authorized.');
 			err.status = 403;
-			throw err;
+			next(err);
 		}
 		let managedList = [];
 		github.repos.getAll().then((repos) => {
@@ -38,6 +38,7 @@ router.get('/', requireLoggedIn(), (req, res, next) => {
 					github.webhooks.getAll(item).then((data) => {
 						let repo = data.repo;
 						let hooks = data.hooks;
+
 						github.webhooks.filterBotHooks(repo.name, hooks).then((filteredHooks) => {
 							let hasHook = filteredHooks.length > 0;
 							if(!hasHook && managedList.filter((t) => { return t.repo.name === repo.name; }).length === 0 ) {
@@ -55,13 +56,13 @@ router.get('/', requireLoggedIn(), (req, res, next) => {
 
 					}, (err) => {
 						console.error(err);
-						throw err;
+						next(err);
 					});
 				}, (err) => {
 					// done repos.each
 					if (err) {
 						console.error(err);
-						throw err;
+						next(err);
 					}
 					let sorted = _.orderBy(managedList, [(o) => {
 						return o.repo.name.toLowerCase();
@@ -71,16 +72,16 @@ router.get('/', requireLoggedIn(), (req, res, next) => {
 				});
 			} catch (ex) {
 				console.error(ex);
-				throw ex;
+				next(err);
 			}
 		}, (err) => {
 			console.error(err);
-			throw err;
+			next(err);
 		});
 
 	}, (err) => {
 		console.error(err);
-		throw err;
+		next(err);
 	});
 });
 
