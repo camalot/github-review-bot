@@ -32,7 +32,7 @@ let getAll = () => {
 		let allRepos = [];
 
 		// if this is a user account vs org
-		method = config.github.manageUserRepos ? "getForUser" : "getForOrg";
+		let method = config.github.manageUserRepos ? "getForUser" : "getForOrg";
 
 		github.repos[method](
 			{
