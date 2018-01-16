@@ -9,33 +9,30 @@ const loginRoute = "/login";
 const Promise = require("promise");
 
 let requireLoggedIn = () => {
-	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
+	return require("connect-ensure-login").ensureLoggedIn(loginRoute);
 };
 
 /* GET home page. */
-router.get("/", (req, res, next) => {
+router.get("/", requireLoggedIn(), function(req, res, next) {
 	github.auth.isUserInOrganization(req.user).then(
-		allowed => {
+		function(allowed) {
 			if (!allowed) {
 				console.log("not Authorized");
 				var err = new Error("Not Authorized.");
 				err.status = 403;
-				throw err;
+				return next(err);
 			}
-
 			github.users.getAll("2fa_disabled").then(
 				result => {
-					res.render("audit", {
-						users: result
-					});
+					res.render("audit", { users: result, title: "User Audit" });
 				},
 				err => {
-					throw err;
+					return next(err);
 				}
 			);
 		},
-		err => {
-			throw err;
+		function(err) {
+			return next(err);
 		}
 	);
 });

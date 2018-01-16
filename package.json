@@ -11,12 +11,15 @@
     "async": "^2.6.0",
     "body-parser": "^1.18.2",
     "connect-ensure-login": "^0.1.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "express-x-hub": "^1.0.4",
     "github": "^13.1.0",
+    "hbs": "^4.0.1",
     "jade": "^1.11.0",
     "lodash": "^4.17.4",
     "material-design-lite": "^1.3.0",
@@ -25,7 +28,8 @@
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-github2": "^0.1.11",
-    "promise": "^8.0.1"
+    "promise": "^8.0.1",
+    "serve-favicon": "^2.4.5"
   },
   "devDependencies": {
     "chai": "^4.1.2",
@@ -40,7 +44,7 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "exec": "$(npm bin)/nodemon ./bin/www",
+    "exec": "nodemon ./bin/www",
     "test": "jshint **/*.js --verbose && eslint . && istanbul cover --include-all-sources $(npm bin)/mocha test/* --reporter spec"
   },
   "author": "Savo",

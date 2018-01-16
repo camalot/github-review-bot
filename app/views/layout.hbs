@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>:: Peer Review Bot :: {{title}}</title>
+	<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="//code.getmdl.io/1.3.0/material.deep_purple-indigo.min.css">
+	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+	<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+	<link href="/assets/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" type="text/css" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script defer src="//code.getmdl.io/1.3.0/material.min.js"></script>
+	<script defer src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+	<link rel="stylesheet" href="/assets/css/style.css" /> {{{block 'head'}}}
+</head>
+
+<body>
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+		<div class="android-header mdl-layout__header mdl-layout__header--waterfall mdl-color--blue-400">
+			<div class="mdl-layout__header-row">
+				<h3>
+					<img src="/assets/images/favicon48.png" style="vertical-align: text-bottom" />{{title}}</h3>
+				<div class="mdl-layout-spacer"></div>
+				{{#if user}}
+
+				<a class="mdl-button mdl-js-button mdl-button--icon" href="/me">
+					<img src="{{user._json.avatar_url}}" style="height: 32px; width: 32px;" />
+				</a>
+				<a class="mdl-button mdl-js-button mdl-button--icon" href="/logout" title="logout">
+					<i class="mdi mdi-logout" style="width: 16px">logout</i>
+				</a>
+				{{else}}
+				<a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-color--indigo-50 mdl-color-text--black"
+				 href="/login" title="login">Login</a>&nbsp;
+				{{/if}}
+			</div>
+		</div>
+		<div class="demo-drawer mdl-layout__drawer mdl-color--grey-50 mdl-color-text--blue-grey-400">
+			<nav class="demo-navigation mdl-navigation mdl-color--grey-50 mdl-color-text--blue-grey-400">
+				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
+				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/dashboard">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">dashboard</i>Dashboard</a>
+				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/log">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">inbox</i>Log</a>
+				<div class="mdl-layout-spacer"></div>
+				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="https://pushover.net/subscribe/MonitorG-cydae4a42hvxtke"
+				 target="_blank">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">sms</i>Subscribe</a>{{!--
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Trash</a>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">report</i>Spam</a>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">forum</i>Forums</a>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">flag</i>Updates</a>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">local_offer</i>Promos</a>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">shopping_cart</i>Purchases</a>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>Social</a>
+				<div class="mdl-layout-spacer"></div>
+				<a class="mdl-navigation__link" href="">
+					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>
+					<span class="visuallyhidden">Help</span>
+				</a> --}}
+			</nav>
+		</div>
+		<main class="mdl-layout__content mdl-color--grey-100">
+			{{{body}}}
+		</main>
+	</div>
+
+	{{#if message}}
+	<script>
+		$(function () {
+			toastr.options = {
+				"closeButton": true,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": false,
+				"positionClass": "toast-top-center",
+				"preventDuplicates": true,
+				"showDuration": "300",
+				"hideDuration": "5000",
+				"timeOut": "-1",
+				"extendedTimeOut": "1000",
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut"
+			};
+			{ { #each message } }
+			toastr["error"]("{{this}}");
+			{
+				{
+					/each}}
+				});
+	</script> {{/if}} {{!--
+	<div id="toast-message" class="mdl-js-snackbar mdl-snackbar">
+		<div class="mdl-snackbar__text"></div>
+		<button class="mdl-snackbar__action" type="button"></button>
+	</div>
+	<script>
+		(function () {
+			'use strict';
+			var snackbarContainer = document.querySelector('#toast-message');
+			document.addEventListener('DOMContentLoaded', function () {
+				console.log("ready dog");
+				'use strict';
+				var data = {
+					message: "{{message}}"
+				};
+				snackbarContainer.MaterialSnackbar.showSnackbar(data);
+			});
+		}());
+	</script> --}} {{{block 'scripts'}}}
+</body>
+
+</html>

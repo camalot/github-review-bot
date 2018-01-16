@@ -50,12 +50,12 @@ node ("docker") {
 						Pipeline.install(this)
 					}
 					stage ("build") {
-						sh script: "${WORKSPACE}/.deploy/build.sh -p '${env.CI_PROJECT_NAME}'"
+						sh script: "${WORKSPACE}/.deploy/build.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
 					}
 					stage ("test") {
 						withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_ARTIFACTORY_CREDENTIAL_ID,
 														usernameVariable: 'ARTIFACTORY_USERNAME', passwordVariable: 'ARTIFACTORY_PASSWORD']]) {
-								sh script: "${WORKSPACE}/.deploy/test.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o ${env.CI_DOCKER_ORGANIZATION}"
+							sh script: "${WORKSPACE}/.deploy/test.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o ${env.CI_DOCKER_ORGANIZATION}"
 						}
 					}
 					stage ("deploy") {

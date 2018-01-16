@@ -9,9 +9,9 @@ var config = {};
 
 config.github = {
 	// the github organization
-	organization: process.env.GRB_ORGANIZATION || 'savolabs',
+	organization: process.env.GRB_ORGANIZATION,
 	// the username for the bot
-	username: process.env.GRB_BOT_USERNAME || 'savo-ci',
+	username: process.env.GRB_BOT_USERNAME,
 	// the github user access token
 	token: process.env.GRB_ACCESS_TOKEN,
 	// the webhook secret used to generate the x-hub sha

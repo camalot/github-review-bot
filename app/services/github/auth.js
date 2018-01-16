@@ -1,7 +1,6 @@
 "use strict";
 const githubApi = require("./github-api");
 const github = githubApi.service;
-const debug = require("debug")("reviewbot:bot");
 const config = require("../../../config");
 const Promise = require("promise");
 
@@ -22,12 +21,12 @@ function authenticate() {
 	});
 }
 
-let isUserInOrganization = user => {
+let isUserInOrganization = function(user) {
 	return new Promise((resolve, reject) => {
 		authenticate();
-
-		github.orgs.getOrgMembership({
-				org: config.organization,
+		github.orgs.getOrgMembership(
+			{
+				org: config.github.organization,
 				username: user.username
 			},
 			(err, result) => {

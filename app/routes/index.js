@@ -4,8 +4,8 @@ const router = express.Router();
 const Promise = require('promise');
 
 /* GET home page. */
-router.get('/', (req, res) => {
-    res.render('index');
+router.get('/', (req, res, next) => {
+  return res.render('index', { title: "HOME" });
 });
 
 module.exports = router;

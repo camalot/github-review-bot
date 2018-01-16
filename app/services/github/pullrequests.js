@@ -24,18 +24,24 @@ let get = (prNumber, repo) => {
 		 * @param {Object[]} result - Returned pull request objects
 		 */
 		debug('GitHub: Attempting to get PR #' + prNumber);
-		github.pullRequests.get({
-			owner: config.organization,
-			repo: repo,
-			number: prNumber
-		}, function(err, result) {
-			if (err) {
-				debug('getPullRequests: Error while fetching PRs: ' + err);
-				return reject(err);
+		github.pullRequests.get(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: prNumber
+			},
+			function(err, result) {
+				if (err) {
+					debug("getPullRequests: Error while fetching PRs: " + err);
+					return reject(err);
+				}
+				debug(
+					"GitHub: PR successfully recieved. Changed files: " +
+						result.changed_files
+				);
+				resolve([result]);
 			}
-			debug('GitHub: PR successfully recieved. Changed files: ' + result.changed_files);
-			resolve([result]);
-		});
+		);
 	});
 };
 
@@ -47,21 +53,24 @@ let get = (prNumber, repo) => {
 let getAll = (repo, callback) => {
 	return new Promise(function(resolve, reject) {
 		auth.authenticate();
-		github.pullRequests.getAll({
-			owner: config.organization,
-			repo: repo,
-			state: config.pullRequestStatus
-		}, (err, result) => {
-			if (err) {
-				debug('getPullRequests: Error while fetching PRs: ', err);
-				return reject(err);
+		github.pullRequests.getAll(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				state: config.pullRequestStatus
+			},
+			(err, result) => {
+				if (err) {
+					debug("getPullRequests: Error while fetching PRs: ", err);
+					return reject(err);
+				}
+				if (!result || !result.length || result.length < 1) {
+					reject("getPullRequests: No open PRs found");
+					debug("getPullRequests: No open PRs found");
+				}
+				return resolve(result);
 			}
-			if (!result || !result.length || result.length < 1) {
-				reject('getPullRequests: No open PRs found');
-				debug('getPullRequests: No open PRs found');
-			}
-			return resolve(result);
-		});
+		);
 	});
 };
 
@@ -69,38 +78,45 @@ let getCommits = (repo, prNumber) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		let allComments = [];
-		github.pullRequests.getCommits({
-			owner: config.organization,
-			repo: repo,
-			number: prNumber,
-			per_page: 100
-		}, (err, results) => {
-			if (err) {
-				return reject(err);
-			}
-			let currentResults = results;
-			allComments = allComments.concat(results);
-			async.whilst(() => {
-				// if there are more pages
-				return github.hasNextPage(currentResults);
-			}, (next) => {
-				// each iteration
+		github.pullRequests.getCommits(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: prNumber,
+				per_page: 100
+			},
+			(err, results) => {
 				if (err) {
-					console.error(err);
-					return next(err);
+					return reject(err);
 				}
-				currentResults = results;
+				let currentResults = results;
 				allComments = allComments.concat(results);
-				next(null, results);
-			}, (err, results) => {
-				// done
-				if (err) {
-					reject(err);
-				} else {
-					resolve(allComments);
-				}
-			});
-		});
+				async.whilst(
+					() => {
+						// if there are more pages
+						return github.hasNextPage(currentResults);
+					},
+					next => {
+						// each iteration
+						if (err) {
+							console.error(err);
+							return next(err);
+						}
+						currentResults = results;
+						allComments = allComments.concat(results);
+						next(null, results);
+					},
+					(err, results) => {
+						// done
+						if (err) {
+							reject(err);
+						} else {
+							resolve(allComments);
+						}
+					}
+				);
+			}
+		);
 	});
 };
 
@@ -133,16 +149,19 @@ let getMostRecentCommit = (repo, prNumber) => {
 let getFiles = (repo, number) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
-		github.pullRequests.getFiles({
-			owner: config.organization,
-			repo: repo,
-			number: number
-		}, function(err, result) {
-			if (err) {
-				return reject(err);
+		github.pullRequests.getFiles(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: number
+			},
+			function(err, result) {
+				if (err) {
+					return reject(err);
+				}
+				return resolve(result);
 			}
-			return resolve(result);
-		});
+		);
 	});
 };
 
@@ -150,40 +169,47 @@ let getAllReviews = (repo, number) => {
 	return new Promise((resolve, reject) => {
 		auth.authenticate();
 		let allReviews = [];
-		github.pullRequests.getReviews({
-			owner: config.organization,
-			repo: repo,
-			number: number,
-			per_page: 100
-		}, (err, results) => {
-			if (err) {
-				return reject(err);
-			}
-			let currentResults = results;
-			allReviews = allReviews.concat(results);
-			async.whilst(() => {
-				// if there are more pages
-				return github.hasNextPage(currentResults);
-			}, (next) => {
-				// each iteration
-				github.getNextPage(currentResults, (err, results) => {
-					if (err) {
-						console.error(err);
-						return next(err);
-					}
-					currentResults = results;
-					allReviews = allReviews.concat(results);
-					next(null, results);
-				});
-			}, (err, results) => {
-				// done
+		github.pullRequests.getReviews(
+			{
+				owner: config.github.organization,
+				repo: repo,
+				number: number,
+				per_page: 100
+			},
+			(err, results) => {
 				if (err) {
-					reject(err);
-				} else {
-					resolve(allReviews);
+					return reject(err);
 				}
-			});
-		})
+				let currentResults = results;
+				allReviews = allReviews.concat(results);
+				async.whilst(
+					() => {
+						// if there are more pages
+						return github.hasNextPage(currentResults);
+					},
+					next => {
+						// each iteration
+						github.getNextPage(currentResults, (err, results) => {
+							if (err) {
+								console.error(err);
+								return next(err);
+							}
+							currentResults = results;
+							allReviews = allReviews.concat(results);
+							next(null, results);
+						});
+					},
+					(err, results) => {
+						// done
+						if (err) {
+							reject(err);
+						} else {
+							resolve(allReviews);
+						}
+					}
+				);
+			}
+		);
 	});
 };
 

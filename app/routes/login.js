@@ -9,7 +9,7 @@ const Promise = require('promise');
 /* GET home page. */
 router.get('/', passport.authenticate('github'));
 router.get('/auth/return',
-	passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+	passport.authenticate('github', { failureRedirect: '/login' }), (req, res, next) => {
     res.redirect('/');
   }
 );

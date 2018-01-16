@@ -2,13 +2,16 @@
 
 const express = require("express");
 const passport = require("passport");
-const Strategy = require("passport-github2").Strategy;
-
 const path = require("path");
-
 const logger = require("morgan");
 const xhub = require("express-x-hub");
 const bodyParser = require("body-parser");
+const favicon = require("serve-favicon");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
+const session = require("express-session");
+const app = express();
+
 const config = require("../config");
 const routes = require("./routes/index");
 const pullrequest = require("./routes/pullrequest");
@@ -19,40 +22,25 @@ const audit = require("./routes/audit");
 const login = require("./routes/login");
 const managed = require("./routes/managed");
 const nonmanaged = require("./routes/nonmanaged");
-const session = require("express-session");
-const app = express();
 
-if(config.github.authClientID && config.github.authClientSecret) {
-  passport.use(new Strategy({
-    clientID: config.github.authClientID,
-    clientSecret: config.github.authClientSecret,
-    callbackURL: config.botUrlRoot + "/login/auth/return"
-  }, function (accessToken, refreshToken, profile, callback) {
-    callback(null,profile);
-  }));
-  passport.serializeUser(function(user, cb) {
-    cb(null, user);
-  });
 
-  passport.deserializeUser(function(obj, cb) {
-    cb(null, obj);
-  });
-}
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
+app.set("view engine", "hbs");
+require("./lib/hbs/xif");
+require("./lib/hbs/sections");
+app.use(favicon(path.join(__dirname, "assets/images", "favicon16.png")));
+
+app.use(session({ secret: "uremwuflwmgfitnmeif" }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+require("./config/passport")(passport);
+app.use(require("./lib/middleware/user"));
+
 
 app.use(logger("dev"));
-app.use("/assets", express.static(path.join(__dirname, "assets")));
-app.use(
-	"/assets/material-design-lite",
-	express.static("node_modules/material-design-lite")
-);
-
-if (config.github.webhookSecret) {
-	app.use(xhub({ algorithm: "sha1", secret: config.github.webhookSecret }));
-}
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
@@ -62,10 +50,31 @@ app.use(
 		saveUninitialized: true
 	})
 );
-if (config.github.authClientID && config.github.authClientSecret) {
-	app.use(passport.initialize());
-	app.use(passport.session());
+app.use(cookieParser());
+
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+// app.use(express.static(path.join(__dirname, "node_modules/mdi")));
+
+app.use(
+	"/assets/material-design-lite",
+	express.static("node_modules/material-design-lite")
+);
+
+if (config.github.webhookSecret) {
+	app.use(xhub({ algorithm: "sha1", secret: config.github.webhookSecret }));
 }
+
+
+// app.use(
+// 	require("node-sass-middleware")({
+// 		src: path.join(__dirname, "public"),
+// 		dest: path.join(__dirname, "public"),
+// 		indentedSyntax: true,
+// 		sourceMap: true
+// 	})
+// );
+
+
 app.use("/", routes);
 app.use("/pullrequest", pullrequest);
 app.use("/repository", repository);
@@ -75,34 +84,28 @@ app.use("/nonmanaged", nonmanaged);
 app.use("/repos", repos);
 app.use("/audit", audit);
 
-if(config.github.authClientID && config.github.authClientSecret) {
-  app.use('/login', login);
+if (config.github.authClientID && config.github.authClientSecret) {
+	app.use("/login", login);
 }
 
-// Catch 404 and forward to error handler
-app.use(function(req, res, next) {
-	var err = new Error("Not Found");
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+	let err = new Error("Page Not Found");
 	err.status = 404;
-	next(err);
+	res.status(404);
+	res.locals.message = err.message;
+	res.render("404", { title: err.status });
 });
 
-// Error Handlers
-if (app.get("env") === "development") {
-	app.use(function(err, req, res) {
-		res.status(err.status || 500);
-		res.render("error", {
-			message: err.message,
-			error: err
-		});
-	});
-} else {
-	app.use(function(err, req, res) {
-		res.status(err.status || 500);
-		res.render("error", {
-			message: err.message,
-			error: {}
-		});
-	});
-}
+// error handler
+app.use((err, req, res, next) => {
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get("env") === "development" ? err : {};
+
+	// render the error page
+	res.status(err.status || 500);
+	res.render("error", { title: "Error: " + err.status });
+});
 
 module.exports = app;

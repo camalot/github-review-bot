@@ -1,0 +1,41 @@
+
+{{#section 'head'}} {{/section}}
+
+<div class="nav-bar">
+	<a class="mdl-button mdl-button--icon mdl-button--colored  mdl-button--fab mdl-js-button mdl-js-ripple-effect" href="/">
+		<i class="material-icons">arrow_back</i>
+	</a>
+</div>
+
+{{#if repos}}
+<section class="section--center mdl-grid">
+{{#each repos}}
+<div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--2dp">
+	<form method="post" action="/repos/enforce/{{this.repo.name}}">
+		<div class="mdl-card__title mdl-card--border">
+			<h2 class="mdl-card__title-text">{{this.repo.name}}</h2>
+		</div>
+		<div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+			<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+				<label class="mdl-textfield__label" for="reviews_{{this.repo.id}}">Required Reviews</label>
+				<input class="mdl-textfield__input" type="number" name="reviewsNeeded" value="3" id="reviews_{{this.repo.id}}" />
+			</div>
+		</div>
+		<div class="mdl-card__actions align-right">
+			<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Register Bot</button>
+		</div>
+	</form>
+</div>
+{{/each}}
+</section>
+{{else}}
+<section class="section--center mdl-grid">
+	<div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">No repositories found.</h2>
+		</div>
+	</div>
+</section>
+{{/if}}
+
+{{#section 'scripts'}} {{/section}}
