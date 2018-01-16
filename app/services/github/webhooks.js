@@ -149,10 +149,10 @@ let getWebHookId = (repo, action) => {
 					hooks,
 					(item, next) => {
 						if (
-							hook.name === "web" &&
-							hook.config.url.match(config.botUrlRoot + action)
+							item.name === "web" &&
+							item.config.url.match(config.botUrlRoot + action)
 						) {
-							result = hook.id;
+							result = item.id;
 						}
 						next();
 					},

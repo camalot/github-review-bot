@@ -23,7 +23,7 @@ let getComments = (repo, number) => {
 					return reject(err);
 				}
 				let currentResults = results;
-				allComments = allComments.concat(results);
+				allComments = allComments.concat(results.data);
 				async.whilst(
 					() => {
 						// if there are more pages
@@ -36,7 +36,7 @@ let getComments = (repo, number) => {
 							return next(err);
 						}
 						currentResults = results;
-						allComments = allComments.concat(results);
+						allComments = allComments.concat(results.data);
 						next(null, results);
 					},
 					(err, results) => {
@@ -84,7 +84,8 @@ let getLabels = (repo, number) => {
 				if (err) {
 					reject(err);
 				} else {
-					resolve(result);
+					console.log(result.data);
+					resolve(result.data);
 				}
 			}
 		);
@@ -109,7 +110,7 @@ let edit = (repo, number, data) => {
 				if (err) {
 					reject(err);
 				} else {
-					resolve(result);
+					resolve(result.data);
 				}
 			}
 		);

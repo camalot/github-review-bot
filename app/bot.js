@@ -133,6 +133,7 @@ let checkForLabel = (prNumber, repo, pr, action) => {
 
 				// Check if already labeled
 				for (var i = 0; i < labels.length; i++) {
+					console.log(`len: ${labels.length}`);
 					labeledNeedsReview = (labels[i].name === config.labelNeedsReview) ? true : labeledNeedsReview;
 					labeledReviewed = (labels[i].name === config.labelPeerReviewed) ? true : labeledReviewed;
 					labeledNeedsWork = (labels[i].name === config.labelNeedsWork) ? true : labeledNeedsWork;
@@ -149,15 +150,13 @@ let checkForLabel = (prNumber, repo, pr, action) => {
 						outLabels.push(labels[i]);
 					}
 				}
-				// we need to remove the peer-reviewed label because there was a new push
-				if (action === 'synchronize' && labels[i].name === config.labelPeerReviewed) {
-					console.log("new push. needs review again.");
-					labeledReviewed = false;
-				} else {
-					console.log("action: " + action);
-					console.log("label: " + labels[i].name);
-					outLabels.push(labels[i]);
-				}
+				// // we need to remove the peer-reviewed label because there was a new push
+				// if (action === 'synchronize' && labels[i].name === config.labelPeerReviewed) {
+				// 	console.log("new push. needs review again.");
+				// 	labeledReviewed = false;
+				// } else {
+				// 	outLabels.push(labels[i]);
+				// }
 
 				return resolve({
 					labelData: {
