@@ -22,7 +22,7 @@ let getAll = (repo) => {
 					return reject(err);
 				}
 				let currentResults = results;
-				allHooks = allHooks.concat(results);
+				allHooks = allHooks.concat(results.data);
 				async.whilst(
 					() => {
 						// if there are more pages
@@ -36,7 +36,7 @@ let getAll = (repo) => {
 								return next(err);
 							}
 							currentResults = results;
-							allHooks = allHooks.concat(results);
+							allHooks = allHooks.concat(results.data);
 							next(null, results);
 						});
 					},
