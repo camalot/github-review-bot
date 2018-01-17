@@ -90,7 +90,7 @@ let getCommits = (repo, prNumber) => {
 					return reject(err);
 				}
 				let currentResults = results;
-				allComments = allComments.concat(results);
+				allComments = allComments.concat(results.data);
 				async.whilst(
 					() => {
 						// if there are more pages
@@ -103,7 +103,7 @@ let getCommits = (repo, prNumber) => {
 							return next(err);
 						}
 						currentResults = results;
-						allComments = allComments.concat(results);
+						allComments = allComments.concat(results.data);
 						next(null, results);
 					},
 					(err, results) => {
@@ -159,7 +159,7 @@ let getFiles = (repo, number) => {
 				if (err) {
 					return reject(err);
 				}
-				return resolve(result);
+				return resolve(result.data);
 			}
 		);
 	});
@@ -181,7 +181,7 @@ let getAllReviews = (repo, number) => {
 					return reject(err);
 				}
 				let currentResults = results;
-				allReviews = allReviews.concat(results);
+				allReviews = allReviews.concat(results.data);
 				async.whilst(
 					() => {
 						// if there are more pages
@@ -195,7 +195,7 @@ let getAllReviews = (repo, number) => {
 								return next(err);
 							}
 							currentResults = results;
-							allReviews = allReviews.concat(results);
+							allReviews = allReviews.concat(results.data);
 							next(null, results);
 						});
 					},
