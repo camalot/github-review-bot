@@ -5,7 +5,7 @@ const merge = require("merge");
 
 let config = {
 	nonmanaged: {
-		route: "/"
+		route: "/nonmanaged"
 	}
 };
 

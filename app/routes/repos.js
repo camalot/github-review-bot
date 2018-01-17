@@ -7,13 +7,11 @@ const router = express.Router();
 const loginRoute = "/login";
 const Promise = require("promise");
 const async = require("async");
+const utils = require("../lib/utils");
 
-let requireLoggedIn = () => {
-	return require("connect-ensure-login").ensureLoggedIn(loginRoute);
-};
 
 /* GET home page. */
-router.get("/", requireLoggedIn(), (req, res, next) => {
+router.get("/", utils.auth.isLoggedIn, (req, res, next) => {
 
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
@@ -46,7 +44,7 @@ router.get("/", requireLoggedIn(), (req, res, next) => {
 	);
 });
 
-router.get("/:repo", requireLoggedIn(), (req, res, next) => {
+router.get("/:repo", utils.auth.isLoggedIn, (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
@@ -74,7 +72,7 @@ router.get("/:repo", requireLoggedIn(), (req, res, next) => {
 	);
 });
 
-router.post("/enforce/:repo", requireLoggedIn(), (req, res, next) => {
+router.post("/enforce/:repo", utils.auth.isLoggedIn, (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
@@ -102,7 +100,7 @@ router.post("/enforce/:repo", requireLoggedIn(), (req, res, next) => {
 	);
 });
 
-router.get("/unenforce/:repo", requireLoggedIn(), (req, res, next) => {
+router.get("/unenforce/:repo", utils.auth.isLoggedIn, (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
@@ -126,7 +124,7 @@ router.get("/unenforce/:repo", requireLoggedIn(), (req, res, next) => {
 	);
 });
 
-router.get("/setup", (req, res, next) => {
+router.get("/setup", utils.auth.isLoggedIn, (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
