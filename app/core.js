@@ -2,7 +2,7 @@ var githubApi = require('./github'),
 	github = githubApi.service,
 	debug = require('debug')('reviewbot:bot'),
 	rules = require('./rules'),
-	config = require('../config');
+	config = require('./config');
 
 function processEvent (prNumber, repo, pr, action, callback) {
 	for(var x = 0; x < rules.length; ++x) {
@@ -15,7 +15,7 @@ function processEvent (prNumber, repo, pr, action, callback) {
 }
 
 function onRepositoryCreate(repo, callback) {
-	var hUrl = config.botUrlRoot + '/pullrequest/';
+	var hUrl = config.GRB.BOTURL + "/pullrequest/";
 	githubApi.webhooks.createWebHook(repo.name, hUrl, config.webHookEvents, function(err, result) {
 		if(!err) {
 			var processCount = 0;

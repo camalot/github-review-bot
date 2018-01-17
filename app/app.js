@@ -12,7 +12,7 @@ const flash = require("connect-flash");
 const session = require("express-session");
 const app = express();
 
-const config = require("../config");
+const config = require("./config");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

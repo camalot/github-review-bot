@@ -4,7 +4,7 @@ const moduleName = "Review";
 const githubApi = require('../github');
 const github = githubApi.service;
 const debug = require('debug')('review:bot');
-const config = require('../../config');
+const config = require('../config');
 
 function beginProcessing (prNumber, repo, pr, action, callback) {
 }

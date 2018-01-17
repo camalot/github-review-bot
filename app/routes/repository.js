@@ -45,7 +45,7 @@ let _processRepositoryEvent = (req, res, next) => {
 			return _respond(res, 'POST Request received, but repository was not included in the body.');
 		}
 		var repo = req.body.repository;
-		var hUrl = config.botUrlRoot + '/pullrequest/' + config.reviewsNeeded.toString();
+		var hUrl = config.GRB.BOTURL + "/pullrequest/" + config.reviewsNeeded.toString();
 
 		githubApi.webhooks.createWebHook(repo.name, hUrl, config.pullRequestEvents).then((result) => {
 			return _respond(res, 'Webhook created for repository: ' + repo.name);

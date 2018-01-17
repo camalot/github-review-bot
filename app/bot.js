@@ -2,7 +2,7 @@
 const githubApi = require('./github');
 const github = githubApi.service;
 const debug = require('debug')('reviewbot:bot');
-const config = require('../config');
+const config = require('./config');
 const Promise = require('promise');
 const async = require('async');
 
@@ -12,7 +12,7 @@ let enforce = (repo, reviewsNeeded) => {
 		if (!resultReviewsNeeded || isNaN(resultReviewsNeeded) || resultReviewsNeeded < 1) {
 			resultReviewsNeeded = config.reviewsNeeded;
 		}
-		var cbUrl = config.botUrlRoot + "/pullrequest/" + resultReviewsNeeded.toString()
+		var cbUrl = config.GRB.BOTURL + "/pullrequest/" + resultReviewsNeeded.toString()
 		githubApi.webhooks.createWebHook(repo, cbUrl, config.pullRequestEvents).then((result) => {
 			resolve(result);
 		}, (err) => {
@@ -150,13 +150,6 @@ let checkForLabel = (prNumber, repo, pr, action) => {
 						outLabels.push(labels[i]);
 					}
 				}
-				// // we need to remove the peer-reviewed label because there was a new push
-				// if (action === 'synchronize' && labels[i].name === config.labelPeerReviewed) {
-				// 	console.log("new push. needs review again.");
-				// 	labeledReviewed = false;
-				// } else {
-				// 	outLabels.push(labels[i]);
-				// }
 
 				return resolve({
 					labelData: {

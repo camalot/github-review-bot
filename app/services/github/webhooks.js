@@ -61,9 +61,8 @@ let filterBotHooks = (repoName, hooks) => {
 	return new Promise(function(resolve, reject) {
 		async.filter(hooks, (hook, next) => {
 			let keep = false;
-			if ((!hook.config && !hook.config.url) || hook.name !== "web" ||
-				hook.url.indexOf(repoName) < 0 ||
-				hook.config.url.substring(0, config.botUrlRoot.length) !== config.botUrlRoot) {
+			if ((!hook.config && !hook.config.url) || hook.name !== "web" || hook.url.indexOf(repoName) < 0 ||
+					hook.config.url.substring(0, config.GRB.BOTURL.length) !== config.GRB.BOTURL) {
 				return next(null, false);
 			}
 			try {
@@ -148,10 +147,7 @@ let getWebHookId = (repo, action) => {
 				async.each(
 					hooks,
 					(item, next) => {
-						if (
-							item.name === "web" &&
-							item.config.url.match(config.botUrlRoot + action)
-						) {
+						if (item.name === "web" && item.config.url.match(config.GRB.BOTURL + action)) {
 							result = item.id;
 						}
 						next();
@@ -181,7 +177,7 @@ let createStatus = (repo, status, sha, description, callback) => {
 				context: "Peer Review Bot",
 				description: description
 				/*,
-					target_url: config.botUrlRoot + "/pr-status/" + repo + "/" + pr.id*/
+					target_url: config.GRB.BOTURL + "/pr-status/" + repo + "/" + pr.id*/
 			},
 			(err, reply) => {
 				if (err) {
