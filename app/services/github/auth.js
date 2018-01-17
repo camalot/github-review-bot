@@ -16,13 +16,14 @@ function authenticate() {
 		type: "basic",
 		username: config.github.username,
 		password: config.github.token
-		// type: 'oauth',
-		// token: config.oauth2token
 	});
 }
 
 let isUserInOrganization = function(user) {
 	return new Promise((resolve, reject) => {
+		if(user == null) {
+			reject(false);
+		}
 		authenticate();
 
 		// need to check if user can manage the repos...
