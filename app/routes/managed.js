@@ -40,7 +40,6 @@ router.get("/", (req, res, next) => {
 							repos,
 							(item, nextRepo) => {
 								// each
-console.log(item);
 								github.webhooks.getAll(item).then(
 									data => {
 										let repo = data.repo;

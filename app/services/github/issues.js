@@ -84,7 +84,6 @@ let getLabels = (repo, number) => {
 				if (err) {
 					reject(err);
 				} else {
-					console.log(result.data);
 					resolve(result.data);
 				}
 			}

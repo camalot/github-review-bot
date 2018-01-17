@@ -1,8 +1,9 @@
 'use strict';
-var merge = require('merge');
-var config = merge(require('./app/rules/config'));
+const merge = require("merge");
+const xconfig = merge(require('./app/rules/config'));
+const npmpackage = require("./package.json");
 
-var config = {};
+let config = {};
 // include a `.env` file in the root
 // loaded in /bin/www
 // or have them loaded into the environment
@@ -24,7 +25,11 @@ config.github = {
 	authClientSecret: process.env.GRB_AUTH_CLIENT_SECRET
 };
 
-console.log(config.github.authClientID);
+config.GRB = {
+	VERSION: npmpackage.version,
+	TITLE: "Peer Review Bot",
+	URL: npmpackage.homepage
+};
 
 // the base url for the bot
 config.botUrlRoot = process.env.GRB_BOT_URL;

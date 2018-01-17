@@ -14,6 +14,7 @@ let requireLoggedIn = () => {
 
 /* GET home page. */
 router.get("/", requireLoggedIn(), (req, res, next) => {
+
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {
@@ -23,6 +24,7 @@ router.get("/", requireLoggedIn(), (req, res, next) => {
 				return next(err);
 			}
 
+			console.log("before getAll");
 			github.repos.getAll().then(
 				result => {
 					res.render("repos", {
@@ -32,11 +34,13 @@ router.get("/", requireLoggedIn(), (req, res, next) => {
 					});
 				},
 				err => {
+					console.log("error");
 					return next(err);
 				}
 			);
 		},
 		err => {
+			console.log("error");
 			return next(err);
 		}
 	);
