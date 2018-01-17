@@ -2,8 +2,6 @@
 const merge = require("merge");
 const rules = merge(require("../rules/config"));
 
-const baseConfig = require("../../config");
-
 let outConfig = {};
 
 const normalizedPath = require("path").join(__dirname, "./");
@@ -20,5 +18,5 @@ require("fs")
 		}
 	});
 
-let result = merge(baseConfig, outConfig);
+let result = merge({}, outConfig);
 module.exports = result;

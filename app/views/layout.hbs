@@ -45,12 +45,14 @@
 				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/repos">
 					<i class="mdl-color-text--blue-grey-400 mdi mdi-view-dashboard material-icons" role="presentation"></i> Repositories</a>
 				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/managed">
-					<i class="mdl-color-text--blue-grey-400 mdi mdi-laptop material-icons" role="presentation"></i> Managed Repositories</a>
+					<i class="mdl-color-text--blue-grey-400 mdi mdi-laptop material-icons" role="presentation"></i> Managed</a>
 				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/nonmanaged">
-					<i class="mdl-color-text--blue-grey-400 mdi mdi-laptop-off material-icons" role="presentation"></i> Nonmanaged Repositories</a>
+					<i class="mdl-color-text--blue-grey-400 mdi mdi-laptop-off material-icons" role="presentation"></i> Unmanaged</a>
+				{{#xif GRB.ISUSERACCOUNT '==' 'false'}}
 				<div class="mdl-layout-spacer"></div>
-				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/audit" target="_blank">
+				<a class="mdl-navigation__link mdl-color-text--blue-grey-400" href="/audit>
 					<i class="mdl-color-text--blue-grey-400 mdi mdi-key material-icons" role="presentation"></i> Audit</a>
+				{{/xif}}
 				{{/if}} {{!--
 				<a class="mdl-navigation__link" href="">
 					<i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Trash</a>

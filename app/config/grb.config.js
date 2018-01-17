@@ -1,13 +1,15 @@
 
 'use strict';
 const npmpackage = require("../../package.json");
+const github = require('./github.config');
 
 let result = {
-	GRB : {
+	GRB: {
 		VERSION: npmpackage.version,
 		TITLE: "Peer Review Bot",
 		URL: npmpackage.homepage,
-		BOTURL: process.env.GRB_BOT_URL
+		BOTURL: process.env.GRB_BOT_URL,
+		ISUSERACCOUNT: github.manageUserRepos
 	}
 };
 
