@@ -1,4 +1,4 @@
-var config = require("../../config");
+var config = require("../config");
 
 config.repo_defaults = {
 	has_issues: false,

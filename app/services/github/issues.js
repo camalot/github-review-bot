@@ -3,7 +3,7 @@ const githubApi = require('./github-api');
 const github = githubApi.service;
 const auth = require('./auth');
 const debug = require('debug')('reviewbot:bot');
-const config = require('../../../config');
+const config = require('../../config');
 const Promise = require('promise');
 const async = require('async');
 

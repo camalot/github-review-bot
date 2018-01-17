@@ -5,7 +5,7 @@
 const githubApi = require('../github');
 const github = githubApi.service;
 const debug = require('debug')('review:bot');
-const config = require('../../config');
+const config = require('../config');
 
 config.repo_defaults = {
 	has_issues: false,

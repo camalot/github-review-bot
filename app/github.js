@@ -9,7 +9,7 @@ var githubApi = require('./services/github/github-api'),
 	reactions = require('./services/github/reactions'),
 	issues = require('./services/github/issues'),
 	debug = require('debug')('reviewbot:bot'),
-	config = require('../config');
+	config = require('./config');
 
 
 module.exports = {
