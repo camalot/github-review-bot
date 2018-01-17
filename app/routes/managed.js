@@ -4,26 +4,23 @@ const bot = require("../bot");
 const github = require("../github");
 const debug = require("debug")("reviewbot:managed");
 const router = express.Router();
-const config = require("../../config");
+const config = require("./managed.config.js");
 const loginRoute = "/login";
 const Promise = require("promise");
 const _ = require("lodash");
 const async = require("async");
+const utils = require("../lib/utils");
 
-let requireLoggedIn = () => {
-	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
-};
 
 let _render = (req, res, data) => {
 	let dataObject = {
 		repos: data,
-		user: req.user,
 		title: "Managed Repositories"
 	};
 	res.render("managed", dataObject);
 };
 
-router.get("/", (req, res, next) => {
+router.get("/", utils.auth.isLoggedIn, (req, res, next) => {
 	github.auth.isUserInOrganization(req.user).then(
 		allowed => {
 			if (!allowed) {

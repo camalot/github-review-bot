@@ -2,15 +2,14 @@
 const express = require("express");
 const bot = require("../bot");
 const githubApi = require("../github");
-const config = require("../../config");
+const config = require("./deployment.config.js");
 const debug = require("debug")("reviewbot:deployment");
 const router = express.Router();
 const loginRoute = "/login";
 const Promise = require("promise");
 
-var requireLoggedIn = function() {
-	return require('connect-ensure-login').ensureLoggedIn(loginRoute);
-};
+const utils = require("../lib/utils");
+
 
 router.post("/:ref", _handleDeploymentEvent);
 

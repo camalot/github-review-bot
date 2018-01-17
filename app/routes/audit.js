@@ -4,16 +4,14 @@ const bot = require("../bot");
 const github = require("../github");
 const debug = require("debug")("reviewbot:audit");
 const router = express.Router();
-const config = require("../../config");
+const config = require("./audit.config.js");
 const loginRoute = "/login";
 const Promise = require("promise");
+const utils = require("../lib/utils");
 
-let requireLoggedIn = () => {
-	return require("connect-ensure-login").ensureLoggedIn(loginRoute);
-};
 
 /* GET home page. */
-router.get("/", requireLoggedIn(), function(req, res, next) {
+router.get("/", utils.auth.isLoggedIn, function(req, res, next) {
 	github.auth.isUserInOrganization(req.user).then(
 		function(allowed) {
 			if (!allowed) {
