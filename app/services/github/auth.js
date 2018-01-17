@@ -28,7 +28,7 @@ let isUserInOrganization = function(user) {
 
 		// need to check if user can manage the repos...
 		if (config.github.manageUserRepos) {
-			return user.username === config.github.organization;
+			return resolve( user.username === config.github.organization );
 		}
 
 		github.orgs.getOrgMembership(

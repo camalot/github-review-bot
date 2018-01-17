@@ -2,6 +2,7 @@
   "name": "github-review-bot",
   "version": "1.2.0",
   "description": "A github review bot",
+  "homepage": "https://github.com/camalot/github-review-bot",
   "main": "index.js",
   "repository": {
     "type": "git",

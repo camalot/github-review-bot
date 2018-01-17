@@ -27,6 +27,7 @@ app.use(passport.session());
 app.use(flash());
 require("./config/passport")(passport);
 app.use(require("./lib/middleware/user"));
+app.use(require("./lib/middleware/grb-info"));
 
 
 app.use(logger("dev"));
