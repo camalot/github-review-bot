@@ -52,7 +52,7 @@
         },
         "repoUrl": {
             "type": "string",
-            "defaultValue": "https://github.com/SavoLabs/github-review-bot"
+            "defaultValue": "https://github.com/camalot/peere-review-bot"
         },
         "branch": {
             "type": "string",

@@ -1,6 +1,10 @@
-# github-review-bot
+# peer-review-bot
 
 This was originally based off the [`peer-review-bot`](https://github.com/felixrieseberg/peer-review-bot) by [Felix Rieseberg](https://github.com/felixrieseberg).
+
+---
+
+**Not affiliated with, or endorsed by, github.**
 
 ---
 

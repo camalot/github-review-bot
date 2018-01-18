@@ -2,7 +2,7 @@
   "name": "Peer Review Bot",
   "description": "A bot to make sure all pull requests are reviewed by peers before merging.",
   "keywords": [ "productivity", "github", "bot" ],
-  "repository": "https://github.com/savolabs/github-review-bot",
+  "repository": "https://github.com/camalot/peer-review-bot",
   "env": {
     "GRB_ACCESS_TOKEN": {
       "description": "A personal access token that is used to authenticate the user",

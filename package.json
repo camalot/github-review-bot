@@ -1,12 +1,12 @@
 {
-  "name": "github-review-bot",
+  "name": "peer-review-bot",
   "version": "1.2.0",
   "description": "A github review bot",
-  "homepage": "https://github.com/camalot/github-review-bot",
+  "homepage": "https://github.com/camalot/peer-review-bot",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/camalot/github-review-bot"
+    "url": "https://github.com/camalot/peer-review-bot"
   },
   "dependencies": {
     "async": "^2.6.0",
