@@ -1,7 +1,7 @@
 FROM node:alpine
 
 # set version label
-ARG PROJECT_NAME="github-review-bot"
+ARG PROJECT_NAME="peer-review-bot"
 ARG BUILD_VERSION="1.0.0-snapshot"
 
 ARG PUID=3000

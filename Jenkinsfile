@@ -7,7 +7,7 @@ if(env.BRANCH_NAME ==~ /master$/) {
 
 
 node ("docker") {
-	def ProjectName = "github-review-bot"
+	def ProjectName = "peer-review-bot"
 	def slack_notify_channel = null
 
 	def SONARQUBE_INSTANCE = "bit13"
@@ -31,6 +31,7 @@ node ("docker") {
 	env.CI_DOCKER_ORGANIZATION = Accounts.GIT_ORGANIZATION
 	env.CI_PROJECT_NAME = ProjectName
 	currentBuild.result = "SUCCESS"
+
 	def errorMessage = null
 	wrap([$class: 'TimestamperBuildWrapper']) {
 		wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
@@ -65,6 +66,11 @@ node ("docker") {
 						// this only will publish if the incominh branch IS develop
 						Branch.publish_to_master(this)
 						Pipeline.publish_buildInfo(this)
+						withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: env.CI_DOCKER_HUB_CREDENTIAL_ID,
+						 								usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
+							sh script:  "${WORKSPACE}/.deploy/publish.sh -n '${env.CI_PROJECT_NAME}' -v '${env.CI_BUILD_VERSION}' -o '${env.CI_DOCKER_ORGANIZATION}'"
+						}
+
 					}
 			} catch(err) {
 				currentBuild.result = "FAILURE"

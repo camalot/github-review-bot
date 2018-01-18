@@ -1,4 +1,4 @@
-application: github-review-bot
+application: peer-review-bot
 runtime: nodejs
 vm: true
 api_version: 1
