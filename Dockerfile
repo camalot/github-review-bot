@@ -43,4 +43,4 @@ RUN \
 	npm version "${BUILD_VERSION}" --git-tag-version && \
 	npm install --production;
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "start"] 
